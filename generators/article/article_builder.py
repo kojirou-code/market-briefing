@@ -69,7 +69,7 @@ def build_article(
     sector_data: dict | None = None,
     breadth_data: dict | None = None,
     direction_score: dict | None = None,
-    chart_urls: dict[str, str] | None = None,
+    chart_urls: dict[str, dict[str, str]] | None = None,
     news_summary: dict | None = None,
 ) -> str:
     """全データをまとめてMarkdown記事を生成する。

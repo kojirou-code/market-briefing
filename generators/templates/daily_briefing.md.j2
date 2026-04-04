@@ -284,9 +284,23 @@ tags: ["daily", "market"]
 {% if not tech.error %}
 #### {{ tech.name }}
 
-{%- set us_chart_url = chart_urls.get(us_indices[loop.index0].ticker) if chart_urls and us_indices|length > loop.index0 else None %}
-{%- if us_chart_url %}
-<img src="{{ us_chart_url }}" alt="{{ tech.name }} 60日チャート" style="max-width:100%;border-radius:4px;margin:8px 0;">
+{%- set _us_ticker = us_indices[loop.index0].ticker if us_indices|length > loop.index0 else None %}
+{%- set _us_pair = chart_urls.get(_us_ticker, {}) if chart_urls and _us_ticker else {} %}
+{%- if _us_pair %}
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;">
+  {%- if _us_pair.get("daily") %}
+  <div style="flex:1;min-width:280px;">
+    <img src="{{ _us_pair.get('daily') }}" alt="{{ tech.name }} 日次チャート（1年）" style="width:100%;border-radius:4px;">
+    <p style="font-size:0.7rem;color:gray;text-align:center;margin:2px 0;">日次・1年（SMA5/25/75）</p>
+  </div>
+  {%- endif %}
+  {%- if _us_pair.get("weekly") %}
+  <div style="flex:1;min-width:280px;">
+    <img src="{{ _us_pair.get('weekly') }}" alt="{{ tech.name }} 週次チャート（3年）" style="width:100%;border-radius:4px;">
+    <p style="font-size:0.7rem;color:gray;text-align:center;margin:2px 0;">週次・3年（SMA13/26/52）</p>
+  </div>
+  {%- endif %}
+</div>
 {%- endif %}
 
 <table class="tech-table">
@@ -346,9 +360,23 @@ tags: ["daily", "market"]
 {% if not tech.error %}
 #### {{ tech.name }}
 
-{%- set jp_chart_url = chart_urls.get(jp_indices[loop.index0].ticker) if chart_urls and jp_indices|length > loop.index0 else None %}
-{%- if jp_chart_url %}
-<img src="{{ jp_chart_url }}" alt="{{ tech.name }} 60日チャート" style="max-width:100%;border-radius:4px;margin:8px 0;">
+{%- set _jp_ticker = jp_indices[loop.index0].ticker if jp_indices|length > loop.index0 else None %}
+{%- set _jp_pair = chart_urls.get(_jp_ticker, {}) if chart_urls and _jp_ticker else {} %}
+{%- if _jp_pair %}
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;">
+  {%- if _jp_pair.get("daily") %}
+  <div style="flex:1;min-width:280px;">
+    <img src="{{ _jp_pair.get('daily') }}" alt="{{ tech.name }} 日次チャート（1年）" style="width:100%;border-radius:4px;">
+    <p style="font-size:0.7rem;color:gray;text-align:center;margin:2px 0;">日次・1年（SMA5/25/75）</p>
+  </div>
+  {%- endif %}
+  {%- if _jp_pair.get("weekly") %}
+  <div style="flex:1;min-width:280px;">
+    <img src="{{ _jp_pair.get('weekly') }}" alt="{{ tech.name }} 週次チャート（3年）" style="width:100%;border-radius:4px;">
+    <p style="font-size:0.7rem;color:gray;text-align:center;margin:2px 0;">週次・3年（SMA13/26/52）</p>
+  </div>
+  {%- endif %}
+</div>
 {%- endif %}
 
 <table class="tech-table">

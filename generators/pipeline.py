@@ -30,7 +30,7 @@ import yaml
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from generators.collectors.market_data import fetch_all_market_data
+from generators.collectors.market_data import fetch_all_market_data, fetch_chart_data
 from generators.collectors.futures_commodities import fetch_all_indicators_and_futures
 from generators.collectors.news_collector import fetch_and_save_news, fetch_news_headlines
 from generators.collectors.gemini_summarizer import generate_and_save_summary, load_summary
@@ -205,9 +205,8 @@ def run_pipeline(
         direction_score = calculate_direction_score(technical_data, breadth_data)
 
         # [P2-4] チャート生成（週間まとめ以外）
-        chart_urls: dict[str, str] = {}
+        chart_urls: dict[str, dict[str, str]] = {}
         if not weekly_mode:
-            logger.info("[P2-4] チャート生成")
             hugo_site_dir = PROJECT_ROOT / settings.get("hugo_site_dir", "hugo-site")
             static_dir = hugo_site_dir / "static"
 
@@ -226,7 +225,17 @@ def run_pipeline(
                 except Exception as e:
                     logger.warning(f"hugo.toml の読み込みに失敗: {e}")
 
-            chart_urls = generate_all_charts(market_data, target_date, static_dir, base_url_path)
+            # チャート用 OHLCV データを一括取得（テクニカル分析用データとは別）
+            logger.info("[P2-4] チャートデータ取得")
+            all_ticker_configs = (
+                settings["tickers"]["us_indices"] + settings["tickers"]["jp_indices"]
+            )
+            chart_data = fetch_chart_data(all_ticker_configs)
+
+            logger.info("[P2-4] チャート生成（日次・週次ローソク足）")
+            chart_urls = generate_all_charts(
+                market_data, chart_data, target_date, static_dir, base_url_path
+            )
 
         # ===== 記事生成 =====
 

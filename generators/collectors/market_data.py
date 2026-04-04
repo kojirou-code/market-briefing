@@ -212,3 +212,97 @@ def fetch_all_market_data(settings: dict) -> dict[str, Any]:
         "jp_indices": jp,
         "fetch_date": date.today(),
     }
+
+
+def _fetch_ohlcv_batch(
+    tickers: list[str],
+    period: str,
+    interval: str,
+) -> dict[str, pd.DataFrame | None]:
+    """複数ティッカーのOHLCVデータを一括取得する（チャート生成用）。
+
+    yfinance の一括ダウンロードを使い、リトライ付きで取得する。
+    MultiIndex カラムからティッカーごとの DataFrame に分割して返す。
+
+    Args:
+        tickers: ティッカー記号のリスト
+        period:  取得期間（例: "1y", "3y"）
+        interval: 時間足（例: "1d", "1wk"）
+
+    Returns:
+        {ticker: DataFrame | None} の辞書。取得失敗時は None。
+    """
+    if not tickers:
+        return {}
+
+    tickers_str = " ".join(tickers)
+    for attempt in range(MAX_RETRIES):
+        try:
+            data = yf.download(
+                tickers_str,
+                period=period,
+                interval=interval,
+                progress=False,
+                auto_adjust=True,
+            )
+            if data is None or data.empty:
+                raise ValueError("empty data")
+
+            result: dict[str, pd.DataFrame | None] = {}
+            for ticker in tickers:
+                try:
+                    if isinstance(data.columns, pd.MultiIndex):
+                        # 複数ティッカー: level=1 がティッカー名
+                        ticker_df = data.xs(ticker, axis=1, level=1).copy()
+                    else:
+                        # 単一ティッカー: フラットカラム
+                        ticker_df = data.copy()
+                    ticker_df = ticker_df.dropna(how="all")
+                    result[ticker] = ticker_df if not ticker_df.empty else None
+                except (KeyError, Exception) as e:
+                    logger.warning(f"{ticker} [{period}/{interval}]: データ抽出失敗: {e}")
+                    result[ticker] = None
+            return result
+
+        except Exception as e:
+            logger.warning(
+                f"一括取得エラー [{period}/{interval}] attempt {attempt + 1}: {e}"
+            )
+        if attempt < MAX_RETRIES - 1:
+            time.sleep(RETRY_DELAY)
+
+    logger.error(f"チャートデータ取得失敗 [{period}/{interval}]: {tickers_str}")
+    return {ticker: None for ticker in tickers}
+
+
+def fetch_chart_data(
+    tickers: list[dict],
+) -> dict[str, dict[str, pd.DataFrame | None]]:
+    """日次(1y)・週次(3y)チャート用OHLCVデータを一括取得する。
+
+    テクニカル分析用の fetch_us_indices() とは別に、mplfinance チャート生成
+    専用のデータを取得する。2回の一括ダウンロード（日次・週次）で完了する。
+
+    Args:
+        tickers: settings.yaml の us_indices + jp_indices を結合したリスト。
+                 各要素は {"ticker": str, "name": str, "display_name": str} 形式。
+
+    Returns:
+        {ticker: {"daily": DataFrame|None, "weekly": DataFrame|None}} の辞書。
+    """
+    ticker_list = [t["ticker"] for t in tickers]
+    logger.info(f"チャートデータ一括取得: {len(ticker_list)}ティッカー × 日次/週次")
+
+    daily_data = _fetch_ohlcv_batch(ticker_list, period="1y", interval="1d")
+    weekly_data = _fetch_ohlcv_batch(ticker_list, period="3y", interval="1wk")
+
+    result: dict[str, dict[str, pd.DataFrame | None]] = {}
+    for ticker in ticker_list:
+        d = daily_data.get(ticker)
+        w = weekly_data.get(ticker)
+        d_rows = len(d) if d is not None else 0
+        w_rows = len(w) if w is not None else 0
+        logger.info(f"{ticker}: 日次{d_rows}行, 週次{w_rows}行")
+        result[ticker] = {"daily": d, "weekly": w}
+
+    return result
