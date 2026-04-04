@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.kojirou.market-briefing-news</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/opt/anaconda3/bin/python</string>
+    <string>/Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/generators/pipeline.py</string>
+    <string>--news-only</string>
+  </array>
+
+  <!-- 12:00 / 18:00 / 23:00 JST にニュース取得 -->
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict>
+      <key>Hour</key>
+      <integer>12</integer>
+      <key>Minute</key>
+      <integer>0</integer>
+    </dict>
+    <dict>
+      <key>Hour</key>
+      <integer>18</integer>
+      <key>Minute</key>
+      <integer>0</integer>
+    </dict>
+    <dict>
+      <key>Hour</key>
+      <integer>23</integer>
+      <key>Minute</key>
+      <integer>0</integer>
+    </dict>
+  </array>
+
+  <!-- 作業ディレクトリ -->
+  <key>WorkingDirectory</key>
+  <string>/Volumes/WD Blue SN500 2TB/projects/investing/market-briefing</string>
+
+  <!-- ログ -->
+  <key>StandardOutPath</key>
+  <string>/Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/data/logs/launchd_news_stdout.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/data/logs/launchd_news_stderr.log</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/opt/anaconda3/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+  </dict>
+
+  <key>RunAtLoad</key>
+  <false/>
+
+</dict>
+</plist>

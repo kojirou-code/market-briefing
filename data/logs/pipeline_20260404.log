@@ -107,3 +107,428 @@
 2026-04-04 18:19:56,560 [INFO] generators.article.article_builder: 記事保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/content/posts/2026-04-04.md
 2026-04-04 18:19:56,560 [INFO] pipeline: dry-run / skip-deploy モード: 記事生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/content/posts/2026-04-04.md
 2026-04-04 18:19:56,560 [INFO] pipeline: ===== パイプライン完了（デプロイスキップ） =====
+2026-04-04 18:31:37,962 [INFO] pipeline: ===== パイプライン開始: 2026-04-04 =====
+2026-04-04 18:31:37,964 [INFO] pipeline: [1] 市場データ取得
+2026-04-04 18:31:37,964 [INFO] generators.collectors.market_data: 市場データ取得開始
+2026-04-04 18:31:39,166 [INFO] generators.collectors.market_data: ^GSPC: 6582.69 (+0.11%)
+2026-04-04 18:31:39,481 [INFO] generators.collectors.market_data: ^IXIC: 21879.18 (+0.18%)
+2026-04-04 18:31:39,852 [INFO] generators.collectors.market_data: ^SOX: 7833.39 (+0.40%)
+2026-04-04 18:31:40,179 [INFO] generators.collectors.market_data: ^N225: 53123.49 (+1.26%)
+2026-04-04 18:31:40,536 [INFO] generators.collectors.market_data: 1306.T: 386.60 (+0.94%)
+2026-04-04 18:31:40,888 [INFO] generators.collectors.market_data: 2516.T: 576.00 (+1.00%)
+2026-04-04 18:31:40,889 [INFO] pipeline: [2] テクニカル分析
+2026-04-04 18:31:41,117 [INFO] generators.analyzers.technical: S&P 500: テクニカル分析完了
+2026-04-04 18:31:41,120 [INFO] generators.analyzers.technical: NASDAQ: テクニカル分析完了
+2026-04-04 18:31:41,121 [INFO] generators.analyzers.technical: SOX（半導体）: テクニカル分析完了
+2026-04-04 18:31:41,124 [INFO] generators.analyzers.technical: 日経平均: テクニカル分析完了
+2026-04-04 18:31:41,127 [INFO] generators.analyzers.technical: TOPIX: テクニカル分析完了
+2026-04-04 18:31:41,136 [INFO] generators.analyzers.technical: グロース250: テクニカル分析完了
+2026-04-04 18:31:41,136 [INFO] pipeline: [3] 指標・先物取得
+2026-04-04 18:31:41,136 [INFO] generators.collectors.futures_commodities: 指標・先物データ取得開始
+2026-04-04 18:31:41,296 [INFO] generators.collectors.futures_commodities: ^VIX: 23.8700
+2026-04-04 18:31:41,511 [INFO] generators.collectors.futures_commodities: ^TNX: 4.3130
+2026-04-04 18:31:41,655 [INFO] generators.collectors.futures_commodities: JPY=X: 159.6320
+2026-04-04 18:31:41,810 [INFO] generators.collectors.futures_commodities: NIY=F: 53305.00
+2026-04-04 18:31:42,176 [INFO] generators.collectors.futures_commodities: ES=F: 6603.75
+2026-04-04 18:31:42,324 [INFO] generators.collectors.futures_commodities: CL=F: 111.54
+2026-04-04 18:31:42,472 [INFO] generators.collectors.futures_commodities: GC=F: 4651.50
+2026-04-04 18:31:42,472 [INFO] pipeline: [4] ニュースRSS取得
+2026-04-04 18:31:42,976 [WARNING] generators.collectors.news_collector: RSS parse error for Reuters Business: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+2026-04-04 18:31:43,007 [WARNING] generators.collectors.news_collector: RSS parse error for Reuters Markets: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+2026-04-04 18:31:43,766 [INFO] generators.collectors.news_collector: CNBC Markets: 0件取得
+2026-04-04 18:31:43,788 [WARNING] generators.collectors.news_collector: RSS parse error for Reuters Japan: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+2026-04-04 18:31:44,271 [INFO] generators.collectors.news_collector: NHK経済: 7件取得
+2026-04-04 18:31:44,271 [INFO] generators.collectors.news_collector: ニュース取得完了: 全7件 → TOP5選別
+2026-04-04 18:31:44,271 [INFO] pipeline: [5] 経済カレンダー読み込み
+2026-04-04 18:31:44,274 [INFO] generators.collectors.economic_calendar: 経済カレンダー: 5件のイベントを返す（今日から14日以内）
+2026-04-04 18:31:44,274 [INFO] pipeline: [6] 異常値チェック
+2026-04-04 18:31:44,275 [INFO] generators.article.alert_checker: アラートチェック完了: 0件
+2026-04-04 18:31:44,275 [INFO] pipeline: [7] Markdown記事生成
+2026-04-04 18:31:44,293 [INFO] generators.article.article_builder: 記事生成完了: 8172文字
+2026-04-04 18:31:44,293 [INFO] generators.article.article_builder: 記事保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/content/posts/2026-04-04.md
+2026-04-04 18:31:44,293 [INFO] pipeline: [8] Hugo build
+2026-04-04 18:31:44,585 [INFO] generators.publisher.hugo_builder: Hugo ビルド成功 (attempt 1)
+2026-04-04 18:31:44,585 [INFO] pipeline: [9] git push → GitHub Pages デプロイ
+2026-04-04 18:31:46,213 [INFO] generators.publisher.deployer: git push 成功 (attempt 1): briefing: 2026-04-04
+2026-04-04 18:31:46,214 [INFO] pipeline: ===== パイプライン完了 =====
+2026-04-04 19:54:52,996 [INFO] pipeline: ===== パイプライン開始: 2026-04-04 =====
+2026-04-04 19:54:52,996 [INFO] pipeline: 週間まとめモードで実行: 2026-04-04
+2026-04-04 19:54:52,998 [INFO] pipeline: [1] 市場データ取得
+2026-04-04 19:54:52,998 [INFO] generators.collectors.market_data: 市場データ取得開始
+2026-04-04 19:54:55,042 [INFO] generators.collectors.market_data: ^GSPC: 6582.69 (+0.11%)
+2026-04-04 19:54:55,378 [INFO] generators.collectors.market_data: ^IXIC: 21879.18 (+0.18%)
+2026-04-04 19:54:55,742 [INFO] generators.collectors.market_data: ^SOX: 7833.39 (+0.40%)
+2026-04-04 19:54:56,088 [INFO] generators.collectors.market_data: ^N225: 53123.49 (+1.26%)
+2026-04-04 19:54:56,436 [INFO] generators.collectors.market_data: 1306.T: 386.60 (+0.94%)
+2026-04-04 19:54:56,803 [INFO] generators.collectors.market_data: 2516.T: 576.00 (+1.00%)
+2026-04-04 19:54:56,803 [INFO] pipeline: [2] テクニカル分析
+2026-04-04 19:54:57,562 [INFO] generators.analyzers.technical: S&P 500: テクニカル分析完了
+2026-04-04 19:54:57,563 [INFO] generators.analyzers.technical: NASDAQ: テクニカル分析完了
+2026-04-04 19:54:57,565 [INFO] generators.analyzers.technical: SOX（半導体）: テクニカル分析完了
+2026-04-04 19:54:57,567 [INFO] generators.analyzers.technical: 日経平均: テクニカル分析完了
+2026-04-04 19:54:57,568 [INFO] generators.analyzers.technical: TOPIX: テクニカル分析完了
+2026-04-04 19:54:57,569 [INFO] generators.analyzers.technical: グロース250: テクニカル分析完了
+2026-04-04 19:54:57,569 [INFO] pipeline: [3] 指標・先物取得
+2026-04-04 19:54:57,569 [INFO] generators.collectors.futures_commodities: 指標・先物データ取得開始
+2026-04-04 19:54:57,853 [INFO] generators.collectors.futures_commodities: ^VIX: 23.8700
+2026-04-04 19:54:57,977 [INFO] generators.collectors.futures_commodities: ^TNX: 4.3130
+2026-04-04 19:54:58,189 [INFO] generators.collectors.futures_commodities: JPY=X: 159.6320
+2026-04-04 19:54:58,380 [INFO] generators.collectors.futures_commodities: NIY=F: 53305.00
+2026-04-04 19:54:58,515 [INFO] generators.collectors.futures_commodities: ES=F: 6603.75
+2026-04-04 19:54:58,709 [INFO] generators.collectors.futures_commodities: CL=F: 111.54
+2026-04-04 19:54:58,905 [INFO] generators.collectors.futures_commodities: GC=F: 4651.50
+2026-04-04 19:54:58,906 [INFO] pipeline: [4] ニュースRSS取得
+2026-04-04 19:54:59,223 [INFO] generators.collectors.news_collector: CNBC Finance: 0件取得
+2026-04-04 19:54:59,461 [INFO] generators.collectors.news_collector: CNBC Markets: 0件取得
+2026-04-04 19:55:00,022 [INFO] generators.collectors.news_collector: Yahoo Finance: 0件取得
+2026-04-04 19:55:01,842 [INFO] generators.collectors.news_collector: MarketWatch: 10件取得
+2026-04-04 19:55:02,709 [INFO] generators.collectors.news_collector: NHK経済: 6件取得
+2026-04-04 19:55:02,710 [INFO] generators.collectors.news_collector: ニュース取得完了: 全16件 → TOP5選別
+2026-04-04 19:55:02,710 [INFO] pipeline: [5] 経済カレンダー読み込み
+2026-04-04 19:55:02,713 [INFO] generators.collectors.economic_calendar: 経済カレンダー: 5件のイベントを返す（今日から14日以内）
+2026-04-04 19:55:02,713 [INFO] pipeline: [P2-1] セクターETF取得
+2026-04-04 19:55:03,437 [INFO] generators.collectors.sector_etf: sector ETF: 11/11 取得成功
+2026-04-04 19:55:03,437 [INFO] generators.collectors.sector_etf: セクターETF取得完了: 11/11件成功
+2026-04-04 19:55:03,437 [INFO] pipeline: [P2-2] Fear & Greed スコア計算
+2026-04-04 19:55:03,442 [INFO] generators.collectors.market_breadth: Fear & Greed スコア: 39.5 (Fear) [VIX=35.0, mom=25.0, rsi=45.0, macd=55.0, hl=37.6]
+2026-04-04 19:55:03,442 [INFO] pipeline: [P2-3] 方向性推定スコア計算
+2026-04-04 19:55:03,443 [INFO] generators.analyzers.direction_scorer: 方向性スコア: 米国=0(中立) 日本=-4(やや弱気) 総合=-2(中立) [F&G=39.5 → -2点]
+2026-04-04 19:55:03,443 [INFO] pipeline: [7] 週間まとめ記事生成
+2026-04-04 19:55:03,461 [INFO] generators.article.article_builder: 週間まとめ記事生成完了: 6529文字
+2026-04-04 19:55:03,461 [INFO] generators.article.article_builder: 記事保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/content/posts/2026-04-04-weekly.md
+2026-04-04 19:55:03,461 [INFO] pipeline: dry-run / skip-deploy モード: 記事生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/content/posts/2026-04-04-weekly.md
+2026-04-04 19:55:03,461 [INFO] pipeline: ===== パイプライン完了（デプロイスキップ） =====
+2026-04-04 19:55:11,923 [INFO] pipeline: ===== パイプライン開始: 2026-04-04 =====
+2026-04-04 19:55:11,923 [INFO] pipeline: 週間まとめモードで実行: 2026-04-04
+2026-04-04 19:55:11,924 [INFO] pipeline: [1] 市場データ取得
+2026-04-04 19:55:11,924 [INFO] generators.collectors.market_data: 市場データ取得開始
+2026-04-04 19:55:12,658 [INFO] generators.collectors.market_data: ^GSPC: 6582.69 (+0.11%)
+2026-04-04 19:55:12,995 [INFO] generators.collectors.market_data: ^IXIC: 21879.18 (+0.18%)
+2026-04-04 19:55:13,279 [INFO] generators.collectors.market_data: ^SOX: 7833.39 (+0.40%)
+2026-04-04 19:55:13,657 [INFO] generators.collectors.market_data: ^N225: 53123.49 (+1.26%)
+2026-04-04 19:55:14,084 [INFO] generators.collectors.market_data: 1306.T: 386.60 (+0.94%)
+2026-04-04 19:55:14,446 [INFO] generators.collectors.market_data: 2516.T: 576.00 (+1.00%)
+2026-04-04 19:55:14,446 [INFO] pipeline: [2] テクニカル分析
+2026-04-04 19:55:14,850 [INFO] generators.analyzers.technical: S&P 500: テクニカル分析完了
+2026-04-04 19:55:14,852 [INFO] generators.analyzers.technical: NASDAQ: テクニカル分析完了
+2026-04-04 19:55:14,854 [INFO] generators.analyzers.technical: SOX（半導体）: テクニカル分析完了
+2026-04-04 19:55:14,856 [INFO] generators.analyzers.technical: 日経平均: テクニカル分析完了
+2026-04-04 19:55:14,857 [INFO] generators.analyzers.technical: TOPIX: テクニカル分析完了
+2026-04-04 19:55:14,859 [INFO] generators.analyzers.technical: グロース250: テクニカル分析完了
+2026-04-04 19:55:14,859 [INFO] pipeline: [3] 指標・先物取得
+2026-04-04 19:55:14,859 [INFO] generators.collectors.futures_commodities: 指標・先物データ取得開始
+2026-04-04 19:55:15,079 [INFO] generators.collectors.futures_commodities: ^VIX: 23.8700
+2026-04-04 19:55:15,309 [INFO] generators.collectors.futures_commodities: ^TNX: 4.3130
+2026-04-04 19:55:15,480 [INFO] generators.collectors.futures_commodities: JPY=X: 159.6320
+2026-04-04 19:55:15,616 [INFO] generators.collectors.futures_commodities: NIY=F: 53305.00
+2026-04-04 19:55:15,785 [INFO] generators.collectors.futures_commodities: ES=F: 6603.75
+2026-04-04 19:55:16,002 [INFO] generators.collectors.futures_commodities: CL=F: 111.54
+2026-04-04 19:55:16,148 [INFO] generators.collectors.futures_commodities: GC=F: 4651.50
+2026-04-04 19:55:16,148 [INFO] pipeline: [4] ニュースRSS取得
+2026-04-04 19:55:16,411 [INFO] generators.collectors.news_collector: CNBC Finance: 0件取得
+2026-04-04 19:55:17,046 [INFO] generators.collectors.news_collector: CNBC Markets: 0件取得
+2026-04-04 19:55:17,134 [INFO] generators.collectors.news_collector: Yahoo Finance: 0件取得
+2026-04-04 19:55:17,608 [INFO] generators.collectors.news_collector: MarketWatch: 10件取得
+2026-04-04 19:55:18,113 [INFO] generators.collectors.news_collector: NHK経済: 6件取得
+2026-04-04 19:55:18,113 [INFO] generators.collectors.news_collector: ニュース取得完了: 全16件 → TOP5選別
+2026-04-04 19:55:18,113 [INFO] pipeline: [5] 経済カレンダー読み込み
+2026-04-04 19:55:18,115 [INFO] generators.collectors.economic_calendar: 経済カレンダー: 5件のイベントを返す（今日から14日以内）
+2026-04-04 19:55:18,115 [INFO] pipeline: [P2-1] セクターETF取得
+2026-04-04 19:55:18,470 [INFO] generators.collectors.sector_etf: sector ETF: 11/11 取得成功
+2026-04-04 19:55:18,471 [INFO] generators.collectors.sector_etf: セクターETF取得完了: 11/11件成功
+2026-04-04 19:55:18,471 [INFO] pipeline: [P2-2] Fear & Greed スコア計算
+2026-04-04 19:55:18,474 [INFO] generators.collectors.market_breadth: Fear & Greed スコア: 39.5 (Fear) [VIX=35.0, mom=25.0, rsi=45.0, macd=55.0, hl=37.6]
+2026-04-04 19:55:18,474 [INFO] pipeline: [P2-3] 方向性推定スコア計算
+2026-04-04 19:55:18,474 [INFO] generators.analyzers.direction_scorer: 方向性スコア: 米国=0(中立) 日本=-4(やや弱気) 総合=-2(中立) [F&G=39.5 → -2点]
+2026-04-04 19:55:18,474 [INFO] pipeline: [7] 週間まとめ記事生成
+2026-04-04 19:55:18,488 [INFO] generators.article.article_builder: 週間まとめ記事生成完了: 6529文字
+2026-04-04 19:55:18,488 [INFO] generators.article.article_builder: 記事保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/content/posts/2026-04-04-weekly.md
+2026-04-04 19:55:18,488 [INFO] pipeline: dry-run / skip-deploy モード: 記事生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/content/posts/2026-04-04-weekly.md
+2026-04-04 19:55:18,489 [INFO] pipeline: ===== パイプライン完了（デプロイスキップ） =====
+2026-04-04 19:58:08,684 [INFO] pipeline: ===== パイプライン開始: 2026-04-04 =====
+2026-04-04 19:58:08,685 [INFO] pipeline: 週間まとめモードで実行: 2026-04-04
+2026-04-04 19:58:08,686 [INFO] pipeline: [1] 市場データ取得
+2026-04-04 19:58:08,686 [INFO] generators.collectors.market_data: 市場データ取得開始
+2026-04-04 19:58:09,978 [INFO] generators.collectors.market_data: ^GSPC: 6582.69 (+0.11%)
+2026-04-04 19:58:10,288 [INFO] generators.collectors.market_data: ^IXIC: 21879.18 (+0.18%)
+2026-04-04 19:58:10,575 [INFO] generators.collectors.market_data: ^SOX: 7833.39 (+0.40%)
+2026-04-04 19:58:10,887 [INFO] generators.collectors.market_data: ^N225: 53123.49 (+1.26%)
+2026-04-04 19:58:11,191 [INFO] generators.collectors.market_data: 1306.T: 386.60 (+0.94%)
+2026-04-04 19:58:11,539 [INFO] generators.collectors.market_data: 2516.T: 576.00 (+1.00%)
+2026-04-04 19:58:11,539 [INFO] pipeline: [2] テクニカル分析
+2026-04-04 19:58:11,926 [INFO] generators.analyzers.technical: S&P 500: テクニカル分析完了
+2026-04-04 19:58:11,928 [INFO] generators.analyzers.technical: NASDAQ: テクニカル分析完了
+2026-04-04 19:58:11,934 [INFO] generators.analyzers.technical: SOX（半導体）: テクニカル分析完了
+2026-04-04 19:58:11,938 [INFO] generators.analyzers.technical: 日経平均: テクニカル分析完了
+2026-04-04 19:58:11,946 [INFO] generators.analyzers.technical: TOPIX: テクニカル分析完了
+2026-04-04 19:58:11,948 [INFO] generators.analyzers.technical: グロース250: テクニカル分析完了
+2026-04-04 19:58:11,948 [INFO] pipeline: [3] 指標・先物取得
+2026-04-04 19:58:11,948 [INFO] generators.collectors.futures_commodities: 指標・先物データ取得開始
+2026-04-04 19:58:12,133 [INFO] generators.collectors.futures_commodities: ^VIX: 23.8700
+2026-04-04 19:58:12,292 [INFO] generators.collectors.futures_commodities: ^TNX: 4.3130
+2026-04-04 19:58:12,441 [INFO] generators.collectors.futures_commodities: JPY=X: 159.6320
+2026-04-04 19:58:12,587 [INFO] generators.collectors.futures_commodities: NIY=F: 53305.00
+2026-04-04 19:58:12,717 [INFO] generators.collectors.futures_commodities: ES=F: 6603.75
+2026-04-04 19:58:12,852 [INFO] generators.collectors.futures_commodities: CL=F: 111.54
+2026-04-04 19:58:12,997 [INFO] generators.collectors.futures_commodities: GC=F: 4651.50
+2026-04-04 19:58:12,997 [INFO] pipeline: [4] ニュースRSS取得
+2026-04-04 19:58:13,680 [INFO] generators.collectors.news_collector: CNBC Finance: 0件取得
+2026-04-04 19:58:13,925 [INFO] generators.collectors.news_collector: CNBC Markets: 0件取得
+2026-04-04 19:58:14,010 [INFO] generators.collectors.news_collector: Yahoo Finance: 10件取得
+2026-04-04 19:58:15,256 [INFO] generators.collectors.news_collector: MarketWatch: 10件取得
+2026-04-04 19:58:15,537 [INFO] generators.collectors.news_collector: NHK経済: 10件取得
+2026-04-04 19:58:15,538 [INFO] generators.collectors.news_collector: ニュース取得完了: 全30件 → TOP5選別
+2026-04-04 19:58:15,538 [INFO] pipeline: [5] 経済カレンダー読み込み
+2026-04-04 19:58:15,541 [INFO] generators.collectors.economic_calendar: 経済カレンダー: 5件のイベントを返す（今日から14日以内）
+2026-04-04 19:58:15,541 [INFO] pipeline: [P2-1] セクターETF取得
+2026-04-04 19:58:15,954 [INFO] generators.collectors.sector_etf: sector ETF: 11/11 取得成功
+2026-04-04 19:58:15,955 [INFO] generators.collectors.sector_etf: セクターETF取得完了: 11/11件成功
+2026-04-04 19:58:15,955 [INFO] pipeline: [P2-2] Fear & Greed スコア計算
+2026-04-04 19:58:15,960 [INFO] generators.collectors.market_breadth: Fear & Greed スコア: 39.5 (Fear) [VIX=35.0, mom=25.0, rsi=45.0, macd=55.0, hl=37.6]
+2026-04-04 19:58:15,960 [INFO] pipeline: [P2-3] 方向性推定スコア計算
+2026-04-04 19:58:15,961 [INFO] generators.analyzers.direction_scorer: 方向性スコア: 米国=0(中立) 日本=-4(やや弱気) 総合=-2(中立) [F&G=39.5 → -2点]
+2026-04-04 19:58:15,961 [INFO] pipeline: [7] 週間まとめ記事生成
+2026-04-04 19:58:15,978 [INFO] generators.article.article_builder: 週間まとめ記事生成完了: 6112文字
+2026-04-04 19:58:15,978 [INFO] generators.article.article_builder: 記事保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/content/posts/2026-04-04-weekly.md
+2026-04-04 19:58:15,978 [INFO] pipeline: [8] Hugo build
+2026-04-04 19:58:16,314 [INFO] generators.publisher.hugo_builder: Hugo ビルド成功 (attempt 1)
+2026-04-04 19:58:16,314 [INFO] pipeline: [9] git push → GitHub Pages デプロイ
+2026-04-04 19:58:18,125 [INFO] generators.publisher.deployer: git push 成功 (attempt 1): briefing: 2026-04-04
+2026-04-04 19:58:18,126 [INFO] pipeline: ===== パイプライン完了 =====
+2026-04-04 20:00:14,112 [INFO] pipeline: ===== パイプライン開始: 2026-04-03 =====
+2026-04-04 20:00:14,116 [INFO] pipeline: [1] 市場データ取得
+2026-04-04 20:00:14,116 [INFO] generators.collectors.market_data: 市場データ取得開始
+2026-04-04 20:00:15,143 [INFO] generators.collectors.market_data: ^GSPC: 6582.69 (+0.11%)
+2026-04-04 20:00:15,432 [INFO] generators.collectors.market_data: ^IXIC: 21879.18 (+0.18%)
+2026-04-04 20:00:15,885 [INFO] generators.collectors.market_data: ^SOX: 7833.39 (+0.40%)
+2026-04-04 20:00:16,181 [INFO] generators.collectors.market_data: ^N225: 53123.49 (+1.26%)
+2026-04-04 20:00:16,535 [INFO] generators.collectors.market_data: 1306.T: 386.60 (+0.94%)
+2026-04-04 20:00:16,985 [INFO] generators.collectors.market_data: 2516.T: 576.00 (+1.00%)
+2026-04-04 20:00:16,985 [INFO] pipeline: [2] テクニカル分析
+2026-04-04 20:00:17,354 [INFO] generators.analyzers.technical: S&P 500: テクニカル分析完了
+2026-04-04 20:00:17,356 [INFO] generators.analyzers.technical: NASDAQ: テクニカル分析完了
+2026-04-04 20:00:17,357 [INFO] generators.analyzers.technical: SOX（半導体）: テクニカル分析完了
+2026-04-04 20:00:17,359 [INFO] generators.analyzers.technical: 日経平均: テクニカル分析完了
+2026-04-04 20:00:17,360 [INFO] generators.analyzers.technical: TOPIX: テクニカル分析完了
+2026-04-04 20:00:17,362 [INFO] generators.analyzers.technical: グロース250: テクニカル分析完了
+2026-04-04 20:00:17,362 [INFO] pipeline: [3] 指標・先物取得
+2026-04-04 20:00:17,362 [INFO] generators.collectors.futures_commodities: 指標・先物データ取得開始
+2026-04-04 20:00:17,525 [INFO] generators.collectors.futures_commodities: ^VIX: 23.8700
+2026-04-04 20:00:17,665 [INFO] generators.collectors.futures_commodities: ^TNX: 4.3130
+2026-04-04 20:00:17,807 [INFO] generators.collectors.futures_commodities: JPY=X: 159.6320
+2026-04-04 20:00:17,982 [INFO] generators.collectors.futures_commodities: NIY=F: 53305.00
+2026-04-04 20:00:18,145 [INFO] generators.collectors.futures_commodities: ES=F: 6603.75
+2026-04-04 20:00:18,280 [INFO] generators.collectors.futures_commodities: CL=F: 111.54
+2026-04-04 20:00:18,414 [INFO] generators.collectors.futures_commodities: GC=F: 4651.50
+2026-04-04 20:00:18,414 [INFO] pipeline: [4] ニュースRSS取得
+2026-04-04 20:00:19,028 [INFO] generators.collectors.news_collector: CNBC Finance: 0件取得
+2026-04-04 20:00:19,278 [INFO] generators.collectors.news_collector: CNBC Markets: 0件取得
+2026-04-04 20:00:19,527 [INFO] generators.collectors.news_collector: Yahoo Finance: 10件取得
+2026-04-04 20:00:20,898 [INFO] generators.collectors.news_collector: MarketWatch: 10件取得
+2026-04-04 20:00:21,041 [INFO] generators.collectors.news_collector: NHK経済: 10件取得
+2026-04-04 20:00:21,041 [INFO] generators.collectors.news_collector: ニュース取得完了: 全30件 → TOP5選別
+2026-04-04 20:00:21,041 [INFO] pipeline: [5] 経済カレンダー読み込み
+2026-04-04 20:00:21,044 [INFO] generators.collectors.economic_calendar: 経済カレンダー: 5件のイベントを返す（今日から14日以内）
+2026-04-04 20:00:21,044 [INFO] pipeline: [6] 異常値チェック
+2026-04-04 20:00:21,045 [INFO] generators.article.alert_checker: アラートチェック完了: 0件
+2026-04-04 20:00:21,045 [INFO] pipeline: [P2-1] セクターETF取得
+2026-04-04 20:00:21,425 [INFO] generators.collectors.sector_etf: sector ETF: 11/11 取得成功
+2026-04-04 20:00:21,425 [INFO] generators.collectors.sector_etf: セクターETF取得完了: 11/11件成功
+2026-04-04 20:00:21,425 [INFO] pipeline: [P2-2] Fear & Greed スコア計算
+2026-04-04 20:00:21,428 [INFO] generators.collectors.market_breadth: Fear & Greed スコア: 39.5 (Fear) [VIX=35.0, mom=25.0, rsi=45.0, macd=55.0, hl=37.6]
+2026-04-04 20:00:21,428 [INFO] pipeline: [P2-3] 方向性推定スコア計算
+2026-04-04 20:00:21,428 [INFO] generators.analyzers.direction_scorer: 方向性スコア: 米国=0(中立) 日本=-4(やや弱気) 総合=-2(中立) [F&G=39.5 → -2点]
+2026-04-04 20:00:21,428 [INFO] pipeline: [P2-4] チャート生成
+2026-04-04 20:00:21,544 [INFO] generators.article.chart_generator: ^GSPC: チャート生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/static/charts/2026-04-03/GSPC.png
+2026-04-04 20:00:21,653 [INFO] generators.article.chart_generator: ^IXIC: チャート生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/static/charts/2026-04-03/IXIC.png
+2026-04-04 20:00:21,707 [INFO] generators.article.chart_generator: ^SOX: チャート生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/static/charts/2026-04-03/SOX.png
+2026-04-04 20:00:21,785 [INFO] generators.article.chart_generator: ^N225: チャート生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/static/charts/2026-04-03/N225.png
+2026-04-04 20:00:21,864 [INFO] generators.article.chart_generator: 1306.T: チャート生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/static/charts/2026-04-03/1306_T.png
+2026-04-04 20:00:21,945 [INFO] generators.article.chart_generator: 2516.T: チャート生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/static/charts/2026-04-03/2516_T.png
+2026-04-04 20:00:21,945 [INFO] generators.article.chart_generator: チャート生成完了: 6/6件
+2026-04-04 20:00:21,945 [INFO] pipeline: [7] Markdown記事生成
+2026-04-04 20:00:21,961 [INFO] generators.article.article_builder: 記事生成完了: 12269文字
+2026-04-04 20:00:21,961 [INFO] generators.article.article_builder: 記事保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/content/posts/2026-04-03.md
+2026-04-04 20:00:21,961 [INFO] pipeline: [8] Hugo build
+2026-04-04 20:00:22,253 [INFO] generators.publisher.hugo_builder: Hugo ビルド成功 (attempt 1)
+2026-04-04 20:00:22,253 [INFO] pipeline: [9] git push → GitHub Pages デプロイ
+2026-04-04 20:00:23,485 [INFO] generators.publisher.deployer: git push 成功 (attempt 1): briefing: 2026-04-03
+2026-04-04 20:00:23,486 [INFO] pipeline: ===== パイプライン完了 =====
+2026-04-04 20:01:15,085 [INFO] pipeline: ===== パイプライン開始: 2026-04-03 =====
+2026-04-04 20:01:15,087 [INFO] pipeline: [1] 市場データ取得
+2026-04-04 20:01:15,087 [INFO] generators.collectors.market_data: 市場データ取得開始
+2026-04-04 20:01:15,939 [INFO] generators.collectors.market_data: ^GSPC: 6582.69 (+0.11%)
+2026-04-04 20:01:16,461 [INFO] generators.collectors.market_data: ^IXIC: 21879.18 (+0.18%)
+2026-04-04 20:01:16,996 [INFO] generators.collectors.market_data: ^SOX: 7833.39 (+0.40%)
+2026-04-04 20:01:17,290 [INFO] generators.collectors.market_data: ^N225: 53123.49 (+1.26%)
+2026-04-04 20:01:17,609 [INFO] generators.collectors.market_data: 1306.T: 386.60 (+0.94%)
+2026-04-04 20:01:17,896 [INFO] generators.collectors.market_data: 2516.T: 576.00 (+1.00%)
+2026-04-04 20:01:17,897 [INFO] pipeline: [2] テクニカル分析
+2026-04-04 20:01:18,691 [INFO] generators.analyzers.technical: S&P 500: テクニカル分析完了
+2026-04-04 20:01:18,695 [INFO] generators.analyzers.technical: NASDAQ: テクニカル分析完了
+2026-04-04 20:01:18,698 [INFO] generators.analyzers.technical: SOX（半導体）: テクニカル分析完了
+2026-04-04 20:01:18,700 [INFO] generators.analyzers.technical: 日経平均: テクニカル分析完了
+2026-04-04 20:01:18,702 [INFO] generators.analyzers.technical: TOPIX: テクニカル分析完了
+2026-04-04 20:01:18,704 [INFO] generators.analyzers.technical: グロース250: テクニカル分析完了
+2026-04-04 20:01:18,704 [INFO] pipeline: [3] 指標・先物取得
+2026-04-04 20:01:18,704 [INFO] generators.collectors.futures_commodities: 指標・先物データ取得開始
+2026-04-04 20:01:18,876 [INFO] generators.collectors.futures_commodities: ^VIX: 23.8700
+2026-04-04 20:01:19,023 [INFO] generators.collectors.futures_commodities: ^TNX: 4.3130
+2026-04-04 20:01:19,175 [INFO] generators.collectors.futures_commodities: JPY=X: 159.6320
+2026-04-04 20:01:19,318 [INFO] generators.collectors.futures_commodities: NIY=F: 53305.00
+2026-04-04 20:01:19,454 [INFO] generators.collectors.futures_commodities: ES=F: 6603.75
+2026-04-04 20:01:19,603 [INFO] generators.collectors.futures_commodities: CL=F: 111.54
+2026-04-04 20:01:19,790 [INFO] generators.collectors.futures_commodities: GC=F: 4651.50
+2026-04-04 20:01:19,791 [INFO] pipeline: [4] ニュースRSS取得
+2026-04-04 20:01:20,175 [INFO] generators.collectors.news_collector: CNBC Finance: 0件取得
+2026-04-04 20:01:20,413 [INFO] generators.collectors.news_collector: CNBC Markets: 0件取得
+2026-04-04 20:01:20,509 [INFO] generators.collectors.news_collector: Yahoo Finance: 10件取得
+2026-04-04 20:01:21,424 [INFO] generators.collectors.news_collector: MarketWatch: 10件取得
+2026-04-04 20:01:22,086 [INFO] generators.collectors.news_collector: NHK経済: 10件取得
+2026-04-04 20:01:22,087 [INFO] generators.collectors.news_collector: ニュース取得完了: 全30件 → TOP5選別
+2026-04-04 20:01:22,087 [INFO] pipeline: [5] 経済カレンダー読み込み
+2026-04-04 20:01:22,089 [INFO] generators.collectors.economic_calendar: 経済カレンダー: 5件のイベントを返す（今日から14日以内）
+2026-04-04 20:01:22,089 [INFO] pipeline: [6] 異常値チェック
+2026-04-04 20:01:22,090 [INFO] generators.article.alert_checker: アラートチェック完了: 0件
+2026-04-04 20:01:22,090 [INFO] pipeline: [P2-1] セクターETF取得
+2026-04-04 20:01:22,490 [INFO] generators.collectors.sector_etf: sector ETF: 11/11 取得成功
+2026-04-04 20:01:22,490 [INFO] generators.collectors.sector_etf: セクターETF取得完了: 11/11件成功
+2026-04-04 20:01:22,490 [INFO] pipeline: [P2-2] Fear & Greed スコア計算
+2026-04-04 20:01:22,495 [INFO] generators.collectors.market_breadth: Fear & Greed スコア: 39.5 (Fear) [VIX=35.0, mom=25.0, rsi=45.0, macd=55.0, hl=37.6]
+2026-04-04 20:01:22,495 [INFO] pipeline: [P2-3] 方向性推定スコア計算
+2026-04-04 20:01:22,495 [INFO] generators.analyzers.direction_scorer: 方向性スコア: 米国=0(中立) 日本=-4(やや弱気) 総合=-2(中立) [F&G=39.5 → -2点]
+2026-04-04 20:01:22,495 [INFO] pipeline: [P2-4] チャート生成
+2026-04-04 20:01:22,622 [INFO] generators.article.chart_generator: ^GSPC: チャート生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/static/charts/2026-04-03/GSPC.png
+2026-04-04 20:01:22,737 [INFO] generators.article.chart_generator: ^IXIC: チャート生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/static/charts/2026-04-03/IXIC.png
+2026-04-04 20:01:22,790 [INFO] generators.article.chart_generator: ^SOX: チャート生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/static/charts/2026-04-03/SOX.png
+2026-04-04 20:01:22,868 [INFO] generators.article.chart_generator: ^N225: チャート生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/static/charts/2026-04-03/N225.png
+2026-04-04 20:01:22,948 [INFO] generators.article.chart_generator: 1306.T: チャート生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/static/charts/2026-04-03/1306_T.png
+2026-04-04 20:01:23,028 [INFO] generators.article.chart_generator: 2516.T: チャート生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/static/charts/2026-04-03/2516_T.png
+2026-04-04 20:01:23,028 [INFO] generators.article.chart_generator: チャート生成完了: 6/6件
+2026-04-04 20:01:23,028 [INFO] pipeline: [7] Markdown記事生成
+2026-04-04 20:01:23,045 [INFO] generators.article.article_builder: 記事生成完了: 12269文字
+2026-04-04 20:01:23,045 [INFO] generators.article.article_builder: 記事保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/content/posts/2026-04-03.md
+2026-04-04 20:01:23,045 [INFO] pipeline: [8] Hugo build
+2026-04-04 20:01:23,317 [INFO] generators.publisher.hugo_builder: Hugo ビルド成功 (attempt 1)
+2026-04-04 20:01:23,317 [INFO] pipeline: [9] git push → GitHub Pages デプロイ
+2026-04-04 20:01:25,074 [INFO] generators.publisher.deployer: git push 成功 (attempt 1): briefing: 2026-04-03
+2026-04-04 20:01:25,075 [INFO] pipeline: ===== パイプライン完了 =====
+2026-04-04 23:05:59,126 [INFO] pipeline: ===== パイプライン開始: 2026-04-04 =====
+2026-04-04 23:05:59,126 [INFO] pipeline: 週間まとめモードで実行: 2026-04-04
+2026-04-04 23:05:59,127 [INFO] pipeline: [1] 市場データ取得
+2026-04-04 23:05:59,127 [INFO] generators.collectors.market_data: 市場データ取得開始
+2026-04-04 23:05:59,957 [INFO] generators.collectors.market_data: ^GSPC: 6582.69 (+0.11%)
+2026-04-04 23:06:00,199 [INFO] generators.collectors.market_data: ^IXIC: 21879.18 (+0.18%)
+2026-04-04 23:06:00,358 [INFO] generators.collectors.market_data: ^SOX: 7833.39 (+0.40%)
+2026-04-04 23:06:00,507 [INFO] generators.collectors.market_data: ^N225: 53123.49 (+1.26%)
+2026-04-04 23:06:00,722 [INFO] generators.collectors.market_data: 1306.T: 386.60 (+0.94%)
+2026-04-04 23:06:00,889 [INFO] generators.collectors.market_data: 2516.T: 576.00 (+1.00%)
+2026-04-04 23:06:00,889 [INFO] pipeline: [2] テクニカル分析
+2026-04-04 23:06:01,338 [INFO] generators.analyzers.technical: S&P 500: テクニカル分析完了
+2026-04-04 23:06:01,343 [INFO] generators.analyzers.technical: NASDAQ: テクニカル分析完了
+2026-04-04 23:06:01,346 [INFO] generators.analyzers.technical: SOX（半導体）: テクニカル分析完了
+2026-04-04 23:06:01,352 [INFO] generators.analyzers.technical: 日経平均: テクニカル分析完了
+2026-04-04 23:06:01,355 [INFO] generators.analyzers.technical: TOPIX: テクニカル分析完了
+2026-04-04 23:06:01,356 [INFO] generators.analyzers.technical: グロース250: テクニカル分析完了
+2026-04-04 23:06:01,356 [INFO] pipeline: [3] 指標・先物取得
+2026-04-04 23:06:01,356 [INFO] generators.collectors.futures_commodities: 指標・先物データ取得開始
+2026-04-04 23:06:01,483 [INFO] generators.collectors.futures_commodities: ^VIX: 23.8700
+2026-04-04 23:06:01,622 [INFO] generators.collectors.futures_commodities: ^TNX: 4.3130
+2026-04-04 23:06:01,780 [INFO] generators.collectors.futures_commodities: JPY=X: 159.6320
+2026-04-04 23:06:01,932 [INFO] generators.collectors.futures_commodities: NIY=F: 53305.00
+2026-04-04 23:06:02,095 [INFO] generators.collectors.futures_commodities: ES=F: 6603.75
+2026-04-04 23:06:02,370 [INFO] generators.collectors.futures_commodities: CL=F: 111.54
+2026-04-04 23:06:02,519 [INFO] generators.collectors.futures_commodities: GC=F: 4651.50
+2026-04-04 23:06:02,519 [INFO] pipeline: [4] ニュース取得
+2026-04-04 23:06:03,522 [INFO] generators.collectors.news_collector: Google News JP: 14件取得
+2026-04-04 23:06:04,423 [INFO] generators.collectors.news_collector: Google News EN: 2件取得
+2026-04-04 23:06:04,423 [INFO] generators.collectors.news_collector: Google News取得完了: 16件 → 重複除去後16件
+2026-04-04 23:06:04,424 [INFO] generators.collectors.news_collector: ニュース保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/data/news/2026-04-04.json (0件既存 + 16件追加 = 16件)
+2026-04-04 23:06:04,424 [INFO] generators.collectors.news_collector: 蓄積JSONからニュース読み込み: 16件
+2026-04-04 23:06:04,424 [INFO] pipeline: [4.5] Geminiサマリー生成
+2026-04-04 23:06:05,226 [INFO] google_genai.models: AFC is enabled with max remote calls: 10.
+2026-04-04 23:06:34,419 [INFO] httpx: HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-04-04 23:06:34,428 [INFO] generators.collectors.gemini_summarizer: Geminiサマリー生成完了: 2531文字
+2026-04-04 23:06:34,435 [INFO] generators.collectors.gemini_summarizer: サマリー保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/data/news/summary_2026-04-04.json
+2026-04-04 23:06:34,436 [INFO] pipeline: Geminiサマリー利用可能
+2026-04-04 23:06:34,436 [INFO] pipeline: [5] 経済カレンダー読み込み
+2026-04-04 23:06:34,442 [INFO] generators.collectors.economic_calendar: 経済カレンダー: 5件のイベントを返す（今日から14日以内）
+2026-04-04 23:06:34,442 [INFO] pipeline: [P2-1] セクターETF取得
+2026-04-04 23:06:34,806 [INFO] generators.collectors.sector_etf: sector ETF: 11/11 取得成功
+2026-04-04 23:06:34,807 [INFO] generators.collectors.sector_etf: セクターETF取得完了: 11/11件成功
+2026-04-04 23:06:34,807 [INFO] pipeline: [P2-2] Fear & Greed スコア計算
+2026-04-04 23:06:34,811 [INFO] generators.collectors.market_breadth: Fear & Greed スコア: 39.5 (Fear) [VIX=35.0, mom=25.0, rsi=45.0, macd=55.0, hl=37.6]
+2026-04-04 23:06:34,811 [INFO] pipeline: [P2-3] 方向性推定スコア計算
+2026-04-04 23:06:34,811 [INFO] generators.analyzers.direction_scorer: 方向性スコア: 米国=0(中立) 日本=-4(やや弱気) 総合=-2(中立) [F&G=39.5 → -2点]
+2026-04-04 23:06:34,811 [INFO] pipeline: [7] 週間まとめ記事生成
+2026-04-04 23:06:34,827 [INFO] generators.article.article_builder: 週間まとめ記事生成完了: 6646文字
+2026-04-04 23:06:34,828 [INFO] generators.article.article_builder: 記事保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/content/posts/2026-04-04-weekly.md
+2026-04-04 23:06:34,828 [INFO] pipeline: [8] Hugo build
+2026-04-04 23:06:35,167 [INFO] generators.publisher.hugo_builder: Hugo ビルド成功 (attempt 1)
+2026-04-04 23:06:35,167 [INFO] pipeline: [9] git push → GitHub Pages デプロイ
+2026-04-04 23:06:36,981 [INFO] generators.publisher.deployer: git push 成功 (attempt 1): briefing: 2026-04-04
+2026-04-04 23:06:36,983 [INFO] pipeline: ===== パイプライン完了 =====
+2026-04-04 23:07:03,762 [INFO] pipeline: ===== パイプライン開始: 2026-04-03 =====
+2026-04-04 23:07:03,763 [INFO] pipeline: [1] 市場データ取得
+2026-04-04 23:07:03,763 [INFO] generators.collectors.market_data: 市場データ取得開始
+2026-04-04 23:07:04,317 [INFO] generators.collectors.market_data: ^GSPC: 6582.69 (+0.11%)
+2026-04-04 23:07:04,467 [INFO] generators.collectors.market_data: ^IXIC: 21879.18 (+0.18%)
+2026-04-04 23:07:04,698 [INFO] generators.collectors.market_data: ^SOX: 7833.39 (+0.40%)
+2026-04-04 23:07:04,847 [INFO] generators.collectors.market_data: ^N225: 53123.49 (+1.26%)
+2026-04-04 23:07:05,020 [INFO] generators.collectors.market_data: 1306.T: 386.60 (+0.94%)
+2026-04-04 23:07:05,231 [INFO] generators.collectors.market_data: 2516.T: 576.00 (+1.00%)
+2026-04-04 23:07:05,231 [INFO] pipeline: [2] テクニカル分析
+2026-04-04 23:07:05,612 [INFO] generators.analyzers.technical: S&P 500: テクニカル分析完了
+2026-04-04 23:07:05,614 [INFO] generators.analyzers.technical: NASDAQ: テクニカル分析完了
+2026-04-04 23:07:05,616 [INFO] generators.analyzers.technical: SOX（半導体）: テクニカル分析完了
+2026-04-04 23:07:05,617 [INFO] generators.analyzers.technical: 日経平均: テクニカル分析完了
+2026-04-04 23:07:05,618 [INFO] generators.analyzers.technical: TOPIX: テクニカル分析完了
+2026-04-04 23:07:05,620 [INFO] generators.analyzers.technical: グロース250: テクニカル分析完了
+2026-04-04 23:07:05,620 [INFO] pipeline: [3] 指標・先物取得
+2026-04-04 23:07:05,620 [INFO] generators.collectors.futures_commodities: 指標・先物データ取得開始
+2026-04-04 23:07:05,838 [INFO] generators.collectors.futures_commodities: ^VIX: 23.8700
+2026-04-04 23:07:06,055 [INFO] generators.collectors.futures_commodities: ^TNX: 4.3130
+2026-04-04 23:07:06,278 [INFO] generators.collectors.futures_commodities: JPY=X: 159.6320
+2026-04-04 23:07:06,469 [INFO] generators.collectors.futures_commodities: NIY=F: 53305.00
+2026-04-04 23:07:06,636 [INFO] generators.collectors.futures_commodities: ES=F: 6603.75
+2026-04-04 23:07:06,800 [INFO] generators.collectors.futures_commodities: CL=F: 111.54
+2026-04-04 23:07:06,994 [INFO] generators.collectors.futures_commodities: GC=F: 4651.50
+2026-04-04 23:07:06,994 [INFO] pipeline: [4] ニュース取得
+2026-04-04 23:07:07,116 [INFO] generators.collectors.news_collector: Google News JP: 14件取得
+2026-04-04 23:07:07,211 [INFO] generators.collectors.news_collector: Google News EN: 2件取得
+2026-04-04 23:07:07,211 [INFO] generators.collectors.news_collector: Google News取得完了: 16件 → 重複除去後16件
+2026-04-04 23:07:07,212 [INFO] generators.collectors.news_collector: ニュース保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/data/news/2026-04-03.json (0件既存 + 16件追加 = 16件)
+2026-04-04 23:07:07,212 [INFO] generators.collectors.news_collector: 蓄積JSONからニュース読み込み: 16件
+2026-04-04 23:07:07,212 [INFO] pipeline: [4.5] Geminiサマリー生成
+2026-04-04 23:07:07,829 [INFO] google_genai.models: AFC is enabled with max remote calls: 10.
+2026-04-04 23:07:31,656 [INFO] httpx: HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-04-04 23:07:31,663 [INFO] generators.collectors.gemini_summarizer: Geminiサマリー生成完了: 2891文字
+2026-04-04 23:07:31,668 [INFO] generators.collectors.gemini_summarizer: サマリー保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/data/news/summary_2026-04-03.json
+2026-04-04 23:07:31,668 [INFO] pipeline: Geminiサマリー利用可能
+2026-04-04 23:07:31,668 [INFO] pipeline: [5] 経済カレンダー読み込み
+2026-04-04 23:07:31,676 [INFO] generators.collectors.economic_calendar: 経済カレンダー: 5件のイベントを返す（今日から14日以内）
+2026-04-04 23:07:31,676 [INFO] pipeline: [6] 異常値チェック
+2026-04-04 23:07:31,677 [INFO] generators.article.alert_checker: アラートチェック完了: 0件
+2026-04-04 23:07:31,677 [INFO] pipeline: [P2-1] セクターETF取得
+2026-04-04 23:07:32,171 [INFO] generators.collectors.sector_etf: sector ETF: 11/11 取得成功
+2026-04-04 23:07:32,171 [INFO] generators.collectors.sector_etf: セクターETF取得完了: 11/11件成功
+2026-04-04 23:07:32,171 [INFO] pipeline: [P2-2] Fear & Greed スコア計算
+2026-04-04 23:07:32,174 [INFO] generators.collectors.market_breadth: Fear & Greed スコア: 39.5 (Fear) [VIX=35.0, mom=25.0, rsi=45.0, macd=55.0, hl=37.6]
+2026-04-04 23:07:32,174 [INFO] pipeline: [P2-3] 方向性推定スコア計算
+2026-04-04 23:07:32,175 [INFO] generators.analyzers.direction_scorer: 方向性スコア: 米国=0(中立) 日本=-4(やや弱気) 総合=-2(中立) [F&G=39.5 → -2点]
+2026-04-04 23:07:32,175 [INFO] pipeline: [P2-4] チャート生成
+2026-04-04 23:07:32,302 [INFO] generators.article.chart_generator: ^GSPC: チャート生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/static/charts/2026-04-03/GSPC.png
+2026-04-04 23:07:32,381 [INFO] generators.article.chart_generator: ^IXIC: チャート生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/static/charts/2026-04-03/IXIC.png
+2026-04-04 23:07:32,436 [INFO] generators.article.chart_generator: ^SOX: チャート生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/static/charts/2026-04-03/SOX.png
+2026-04-04 23:07:32,514 [INFO] generators.article.chart_generator: ^N225: チャート生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/static/charts/2026-04-03/N225.png
+2026-04-04 23:07:32,594 [INFO] generators.article.chart_generator: 1306.T: チャート生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/static/charts/2026-04-03/1306_T.png
+2026-04-04 23:07:32,675 [INFO] generators.article.chart_generator: 2516.T: チャート生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/static/charts/2026-04-03/2516_T.png
+2026-04-04 23:07:32,676 [INFO] generators.article.chart_generator: チャート生成完了: 6/6件
+2026-04-04 23:07:32,676 [INFO] pipeline: [7] Markdown記事生成
+2026-04-04 23:07:32,694 [INFO] generators.article.article_builder: 記事生成完了: 14431文字
+2026-04-04 23:07:32,694 [INFO] generators.article.article_builder: 記事保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/content/posts/2026-04-03.md
+2026-04-04 23:07:32,694 [INFO] pipeline: [8] Hugo build
+2026-04-04 23:07:33,002 [INFO] generators.publisher.hugo_builder: Hugo ビルド成功 (attempt 1)
+2026-04-04 23:07:33,002 [INFO] pipeline: [9] git push → GitHub Pages デプロイ
+2026-04-04 23:07:34,353 [INFO] generators.publisher.deployer: git push 成功 (attempt 1): briefing: 2026-04-03
+2026-04-04 23:07:34,354 [INFO] pipeline: ===== パイプライン完了 =====

@@ -1,0 +1,172 @@
+---
+title: "{{ title }}"
+date: {{ date_iso }}
+draft: false
+description: "{{ description }}"
+tags: ["weekly", "market", "review"]
+---
+
+## 📊 週間サマリー（{{ week_label }}）
+
+<div class="market-grid">
+<div class="market-card">
+
+### 🇺🇸 米国市場（週間騰落率）
+
+{% for idx in us_indices %}
+<div class="market-row">
+<span class="market-name">{{ idx.display_name }}</span>
+<span class="market-value">
+  {%- if idx.error -%}
+  <span style="color:gray;">取得失敗</span>
+  {%- else -%}
+  {{ "%.2f"|format(idx.close) if idx.close else "—" }}
+  <span class="{{ 'change-positive' if idx.week_change_pct and idx.week_change_pct > 0 else 'change-negative' if idx.week_change_pct and idx.week_change_pct < 0 else 'change-neutral' }}">
+    {{ "%+.2f%%"|format(idx.week_change_pct) if idx.week_change_pct is not none else "—" }}（週間）
+  </span>
+  {%- endif -%}
+</span>
+</div>
+{% endfor %}
+
+</div>
+<div class="market-card">
+
+### 🇯🇵 日本市場（週間騰落率）
+
+{% for idx in jp_indices %}
+<div class="market-row">
+<span class="market-name">{{ idx.display_name }}</span>
+<span class="market-value">
+  {%- if idx.error -%}
+  <span style="color:gray;">取得失敗</span>
+  {%- else -%}
+  {{ "%.2f"|format(idx.close) if idx.close else "—" }}
+  <span class="{{ 'change-positive' if idx.week_change_pct and idx.week_change_pct > 0 else 'change-negative' if idx.week_change_pct and idx.week_change_pct < 0 else 'change-neutral' }}">
+    {{ "%+.2f%%"|format(idx.week_change_pct) if idx.week_change_pct is not none else "—" }}（週間）
+  </span>
+  {%- endif -%}
+</span>
+</div>
+{% endfor %}
+
+</div>
+</div>
+
+### 📊 週間の主要指標
+
+<div class="indicators-row">
+{% for ind in indicators %}
+<div class="indicator-item">
+<span class="indicator-label">{{ ind.display_name }}</span>
+<span class="indicator-value">
+  {%- if ind.error -%}—
+  {%- elif ind.name == "USDJPY" -%}{{ "%.2f"|format(ind.value) if ind.value else "—" }}
+  {%- elif ind.name == "US10Y" -%}{{ "%.2f%%"|format(ind.value) if ind.value else "—" }}
+  {%- else -%}{{ "%.2f"|format(ind.value) if ind.value else "—" }}{% if ind.signal is defined %} {{ ind.signal }}{% endif %}
+  {%- endif -%}
+</span>
+{% if ind.week_change_pct is defined and ind.week_change_pct is not none %}
+<span class="indicator-label {{ 'change-positive' if ind.week_change_pct > 0 else 'change-negative' if ind.week_change_pct < 0 else 'change-neutral' }}">
+  週間: {{ "%+.2f%%"|format(ind.week_change_pct) }}
+</span>
+{% endif %}
+</div>
+{% endfor %}
+
+{%- if fear_greed and not fear_greed.error %}
+<div class="indicator-item">
+<span class="indicator-label">Fear & Greed</span>
+<span class="indicator-value">{{ fear_greed.score }} {{ fear_greed.emoji }}</span>
+<span class="indicator-label">{{ fear_greed.label }}</span>
+</div>
+{%- endif %}
+</div>
+
+{%- if sector_data and not sector_data.error %}
+---
+
+### 🏭 週間セクター騰落ランキング
+
+<table class="tech-table">
+<thead>
+<tr><th>順位</th><th>セクター</th><th>ETF</th><th>週間騰落率</th></tr>
+</thead>
+<tbody>
+{% for s in sector_data.sectors %}
+<tr>
+<td>{{ s.rank }}</td>
+<td>{{ s.name }}</td>
+<td style="font-size:0.8rem;color:gray;">{{ s.ticker }}</td>
+<td class="{{ 'change-positive' if s.change_pct and s.change_pct > 0 else 'change-negative' if s.change_pct and s.change_pct < 0 else 'change-neutral' }}">
+  {%- if s.error -%}—{%- else -%}{{ "%+.2f%%"|format(s.change_pct) if s.change_pct is not none else "—" }}{%- endif -%}
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{%- endif %}
+
+{%- if direction_score %}
+---
+
+### 🧭 週末時点の方向性
+
+<div class="indicators-row">
+<div class="indicator-item">
+<span class="indicator-label">米国</span>
+<span class="indicator-value">{{ direction_score.us.emoji }} {{ direction_score.us.label }}</span>
+</div>
+<div class="indicator-item">
+<span class="indicator-label">日本</span>
+<span class="indicator-value">{{ direction_score.jp.emoji }} {{ direction_score.jp.label }}</span>
+</div>
+<div class="indicator-item">
+<span class="indicator-label">総合</span>
+<span class="indicator-value">{{ direction_score.overall.emoji }} {{ direction_score.overall.label }}</span>
+</div>
+</div>
+{%- endif %}
+
+---
+
+### 📰 週間注目ニュース
+
+{% if news_error %}
+<p style="color:gray;">ニュース取得失敗</p>
+{% elif news_top5 %}
+<ol class="news-list">
+{% for item in news_top5 %}
+<li>
+{% if item.url %}<a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>{% else %}{{ item.title }}{% endif %}
+<span class="news-source">（{{ item.source }}）</span>
+</li>
+{% endfor %}
+</ol>
+{% else %}
+<p style="color:gray;">ニュースなし</p>
+{% endif %}
+
+---
+
+### 📅 来週の重要イベント
+
+{% if calendar_events %}
+<ul class="calendar-list">
+{% for ev in calendar_events %}
+<li>
+<span class="calendar-date">{{ ev.date_str }}({{ ev.weekday }})</span>
+<span>{{ "🇺🇸" if ev.country == "US" else "🇯🇵" if ev.country == "JP" else "" }} {{ ev.event }}</span>
+{% if ev.importance == "high" %}<span style="color:#ef4444;font-size:0.75rem;"> ★重要</span>{% endif %}
+</li>
+{% endfor %}
+</ul>
+{% else %}
+<p style="color:gray;">来週のイベントなし</p>
+{% endif %}
+
+---
+
+<p style="font-size:0.75rem;color:gray;">
+生成日時: {{ generated_at }} | データ: yfinance / RSS
+</p>

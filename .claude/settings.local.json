@@ -14,7 +14,17 @@
       "Bash(/opt/anaconda3/bin/python generators/pipeline.py --dry-run)",
       "Bash(/opt/anaconda3/bin/python -c \":*)",
       "Bash(/opt/anaconda3/bin/python -m pytest tests/ -v --tb=short)",
-      "Bash(hugo --minify)"
+      "Bash(hugo --minify)",
+      "Bash(/opt/anaconda3/bin/python -c \"import numpy; print\\(numpy.__version__\\); import matplotlib; print\\(matplotlib.__version__\\)\")",
+      "Bash(/opt/anaconda3/bin/python -c \"import pandas_ta as ta; print\\(''pandas-ta OK''\\)\")",
+      "Bash(/opt/anaconda3/bin/pip install google-generativeai --quiet)",
+      "Bash(/opt/anaconda3/bin/python -c \"import google.generativeai; print\\(''installed OK''\\)\")",
+      "Bash(/opt/anaconda3/bin/python -c \"import google.genai; print\\(''google.genai installed OK''\\)\")",
+      "Bash(/opt/anaconda3/bin/pip install google-genai --quiet)",
+      "Bash(/opt/anaconda3/bin/python -c \"import google.genai; print\\(''google.genai OK''\\)\")",
+      "Bash(/opt/anaconda3/bin/python generators/pipeline.py --date 2026-04-03 --dry-run)",
+      "Bash(/opt/anaconda3/bin/python -m pytest tests/test_market_data.py -v)",
+      "Bash(/opt/anaconda3/bin/python -m pytest tests/)"
     ]
   }
 }

@@ -65,3 +65,17 @@ tickers:
     - ticker: "GC=F"
       name: "Gold"
       display_name: "金"
+
+# Phase 2: セクターETF (米国11セクター)
+sector_etf_tickers:
+  - "XLK"   # 情報技術
+  - "XLF"   # 金融
+  - "XLV"   # ヘルスケア
+  - "XLY"   # 一般消費財
+  - "XLP"   # 生活必需品
+  - "XLE"   # エネルギー
+  - "XLU"   # 公益事業
+  - "XLI"   # 資本財
+  - "XLB"   # 素材
+  - "XLRE"  # 不動産
+  - "XLC"   # 通信サービス

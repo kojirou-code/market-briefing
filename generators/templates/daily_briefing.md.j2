@@ -85,6 +85,14 @@ tags: ["daily", "market"]
 {% endif %}
 </div>
 {% endfor %}
+
+{%- if fear_greed and not fear_greed.error %}
+<div class="indicator-item">
+<span class="indicator-label">Fear & Greed</span>
+<span class="indicator-value">{{ fear_greed.score }} {{ fear_greed.emoji }}</span>
+<span class="indicator-label">{{ fear_greed.label }}</span>
+</div>
+{%- endif %}
 </div>
 
 ### 🔮 先物・コモディティ
@@ -107,6 +115,28 @@ tags: ["daily", "market"]
 {% endfor %}
 </div>
 
+{%- if direction_score %}
+### 🧭 方向性推定
+
+<div class="indicators-row">
+<div class="indicator-item">
+<span class="indicator-label">米国</span>
+<span class="indicator-value">{{ direction_score.us.emoji }} {{ direction_score.us.label }}</span>
+<span class="indicator-label" style="font-size:0.75rem;">スコア {{ "%+d"|format(direction_score.us.score) }}/10</span>
+</div>
+<div class="indicator-item">
+<span class="indicator-label">日本</span>
+<span class="indicator-value">{{ direction_score.jp.emoji }} {{ direction_score.jp.label }}</span>
+<span class="indicator-label" style="font-size:0.75rem;">スコア {{ "%+d"|format(direction_score.jp.score) }}/10</span>
+</div>
+<div class="indicator-item">
+<span class="indicator-label">総合</span>
+<span class="indicator-value">{{ direction_score.overall.emoji }} {{ direction_score.overall.label }}</span>
+<span class="indicator-label" style="font-size:0.75rem;">スコア {{ "%+d"|format(direction_score.overall.score) }}/10</span>
+</div>
+</div>
+{%- endif %}
+
 ---
 
 ### 📅 今週の重要イベント
@@ -127,8 +157,80 @@ tags: ["daily", "market"]
 
 ---
 
-### 📰 注目ニュース TOP5
+### 📰 注目ニュース
 
+{%- if news_summary %}
+{# Geminiサマリーが利用可能な場合 #}
+<div class="news-summary">
+
+<div class="summary-conclusion">
+
+**📌 本日の結論**
+
+{{ news_summary.conclusion }}
+
+</div>
+
+{%- if news_summary.political_news %}
+<details class="detail-section" open>
+<summary>🗳️ 政治・地政学ニュース</summary>
+
+{% for item in news_summary.political_news %}
+<div class="news-card">
+
+**{{ item.headline }}**
+<span class="risk-{{ 'high' if item.risk_level == '高' else 'mid' if item.risk_level == '中' else 'low' }}" style="font-size:0.75rem;margin-left:0.5rem;">リスク: {{ item.risk_level }}</span>
+
+{{ item.what_happened }}
+
+*影響: {{ item.why_important }}*
+
+<span class="news-source" style="font-size:0.75rem;color:gray;">{{ item.source }}</span>
+
+</div>
+{% endfor %}
+
+</details>
+{%- endif %}
+
+{%- if news_summary.economic_news %}
+<details class="detail-section" open>
+<summary>📊 経済・金融ニュース</summary>
+
+{% for item in news_summary.economic_news %}
+<div class="news-card">
+
+**{{ item.headline }}**
+
+{{ item.facts }}
+
+米国: {{ item.us_market_impact }} / 日本: {{ item.jp_market_impact }}
+
+<span class="news-source" style="font-size:0.75rem;color:gray;">{{ item.source }}</span>
+
+</div>
+{% endfor %}
+
+</details>
+{%- endif %}
+
+{%- if news_summary.market_perspective %}
+<details class="detail-section" open>
+<summary>🌏 日米マーケット視点</summary>
+
+| 市場 | サマリー |
+|------|---------|
+| 🇺🇸 米国 | {{ news_summary.market_perspective.us_summary }} |
+| 🇯🇵 日本 | {{ news_summary.market_perspective.jp_summary }} |
+| 🔗 連動 | {{ news_summary.market_perspective.us_jp_linkage }} |
+
+</details>
+{%- endif %}
+
+</div>
+
+{%- else %}
+{# フォールバック: 通常のTOP5表示 #}
 {% if news_error %}
 <p style="color:gray;">ニュース取得失敗</p>
 {% elif news_top5 %}
@@ -143,8 +245,35 @@ tags: ["daily", "market"]
 {% else %}
 <p style="color:gray;">ニュースなし</p>
 {% endif %}
+{%- endif %}
 
 ---
+
+{%- if sector_data and not sector_data.error %}
+<details class="detail-section">
+<summary>▼ セクター騰落ランキング（米国）</summary>
+
+<table class="tech-table">
+<thead>
+<tr><th>順位</th><th>セクター</th><th>ETF</th><th>騰落率</th><th>信号</th></tr>
+</thead>
+<tbody>
+{% for s in sector_data.sectors %}
+<tr>
+<td>{{ s.rank }}</td>
+<td>{{ s.name }}</td>
+<td style="font-size:0.8rem;color:gray;">{{ s.ticker }}</td>
+<td class="{{ 'change-positive' if s.change_pct and s.change_pct > 0 else 'change-negative' if s.change_pct and s.change_pct < 0 else 'change-neutral' }}">
+  {%- if s.error -%}—{%- else -%}{{ "%+.2f%%"|format(s.change_pct) if s.change_pct is not none else "—" }}{%- endif -%}
+</td>
+<td>{{ s.signal }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+</details>
+{%- endif %}
 
 <details class="detail-section">
 <summary>▼ テクニカル詳細</summary>
@@ -154,6 +283,11 @@ tags: ["daily", "market"]
 {% for tech in us_technical %}
 {% if not tech.error %}
 #### {{ tech.name }}
+
+{%- set us_chart_url = chart_urls.get(us_indices[loop.index0].ticker) if chart_urls and us_indices|length > loop.index0 else None %}
+{%- if us_chart_url %}
+<img src="{{ us_chart_url }}" alt="{{ tech.name }} 60日チャート" style="max-width:100%;border-radius:4px;margin:8px 0;">
+{%- endif %}
 
 <table class="tech-table">
 <thead>
@@ -212,6 +346,11 @@ tags: ["daily", "market"]
 {% if not tech.error %}
 #### {{ tech.name }}
 
+{%- set jp_chart_url = chart_urls.get(jp_indices[loop.index0].ticker) if chart_urls and jp_indices|length > loop.index0 else None %}
+{%- if jp_chart_url %}
+<img src="{{ jp_chart_url }}" alt="{{ tech.name }} 60日チャート" style="max-width:100%;border-radius:4px;margin:8px 0;">
+{%- endif %}
+
 <table class="tech-table">
 <thead>
 <tr><th>指標</th><th>シグナル</th><th>値</th></tr>
@@ -262,6 +401,37 @@ tags: ["daily", "market"]
 
 {% endif %}
 {% endfor %}
+
+{%- if direction_score %}
+### 🧭 方向性推定 詳細
+
+<table class="tech-table">
+<thead>
+<tr><th>市場</th><th>判定</th><th>スコア</th><th>テクニカル</th><th>F&G</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>米国</td>
+<td>{{ direction_score.us.emoji }} {{ direction_score.us.label }}</td>
+<td>{{ "%+d"|format(direction_score.us.score) }}/10</td>
+<td>{{ "%+d"|format(direction_score.us.tech_score) }}/6</td>
+<td>{{ "%+d"|format(direction_score.us.fg_score) }}/4</td>
+</tr>
+<tr>
+<td>日本</td>
+<td>{{ direction_score.jp.emoji }} {{ direction_score.jp.label }}</td>
+<td>{{ "%+d"|format(direction_score.jp.score) }}/10</td>
+<td>{{ "%+d"|format(direction_score.jp.tech_score) }}/6</td>
+<td>{{ "%+d"|format(direction_score.jp.fg_score) }}/4</td>
+</tr>
+</tbody>
+</table>
+
+<p style="font-size:0.8rem;color:gray;">
+Fear & Greed: {{ direction_score.fg_raw }} ({{ direction_score.fg_label }})
+スコアは参考値です。投資判断の最終確認は各自でお願いします。
+</p>
+{%- endif %}
 
 </details>
 
