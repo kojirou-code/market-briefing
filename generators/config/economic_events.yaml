@@ -1,0 +1,80 @@
+# 経済指標カレンダー（手動管理・Phase 1）
+# 定例イベントと直近イベントを記載
+# 形式: date: YYYY-MM-DD, event: イベント名, country: 国, importance: high/medium/low
+
+events:
+  # --- 2026年4月 ---
+  - date: "2026-04-07"
+    event: "ISM非製造業景気指数（3月）"
+    country: "US"
+    importance: "high"
+
+  - date: "2026-04-10"
+    event: "CPI（消費者物価指数・3月）"
+    country: "US"
+    importance: "high"
+
+  - date: "2026-04-11"
+    event: "日銀金融政策決定会合 議事要旨"
+    country: "JP"
+    importance: "medium"
+
+  - date: "2026-04-15"
+    event: "小売売上高（3月）"
+    country: "US"
+    importance: "high"
+
+  - date: "2026-04-16"
+    event: "鉱工業生産（3月）"
+    country: "US"
+    importance: "medium"
+
+  - date: "2026-04-17"
+    event: "フィラデルフィア連銀製造業景気指数"
+    country: "US"
+    importance: "medium"
+
+  - date: "2026-04-23"
+    event: "PMI速報値（4月）"
+    country: "US"
+    importance: "medium"
+
+  - date: "2026-04-24"
+    event: "GDP速報値（Q1）"
+    country: "US"
+    importance: "high"
+
+  - date: "2026-04-25"
+    event: "PCEデフレーター（3月）"
+    country: "US"
+    importance: "high"
+
+  - date: "2026-04-28"
+    event: "日銀金融政策決定会合（〜4/29）"
+    country: "JP"
+    importance: "high"
+
+  - date: "2026-04-29"
+    event: "日銀政策金利・展望レポート"
+    country: "JP"
+    importance: "high"
+
+  - date: "2026-04-30"
+    event: "FOMC（〜4/30）"
+    country: "US"
+    importance: "high"
+
+  # --- 2026年5月 ---
+  - date: "2026-05-01"
+    event: "FOMC政策金利発表"
+    country: "US"
+    importance: "high"
+
+  - date: "2026-05-02"
+    event: "雇用統計（4月）"
+    country: "US"
+    importance: "high"
+
+# 表示する直近イベント数（今日から数えて）
+display_days_ahead: 14
+display_max_events: 5

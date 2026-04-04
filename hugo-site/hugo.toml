@@ -1,0 +1,38 @@
+baseURL = "https://kojirou-code.github.io/market-briefing/"
+languageCode = "ja"
+title = "Daily Market Briefing"
+theme = "PaperMod"
+paginate = 30
+enableRobotsTXT = false
+
+[params]
+  description = "個人用デイリーマーケットブリーフィング"
+  author = "kojirou"
+  ShowReadingTime = false
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = false
+  ShowCodeCopyButtons = false
+  disableThemeToggle = false
+  defaultTheme = "auto"
+  DateFormat = "2006年1月2日（Mon）"
+
+  [params.homeInfoParams]
+    Title = "Daily Market Briefing"
+    Content = "前日の米国・日本株式市場の動向をまとめた個人用ブリーフィング"
+
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "ホーム"
+    url = "/"
+    weight = 1
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[outputs]
+  home = ["HTML", "RSS"]
+  page = ["HTML"]

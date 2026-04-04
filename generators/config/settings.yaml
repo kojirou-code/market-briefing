@@ -1,0 +1,67 @@
+# Market Briefing — Main Settings
+
+# Python & Hugo paths
+python_path: /opt/anaconda3/bin/python
+hugo_path: /opt/homebrew/bin/hugo
+
+# Project paths (relative to project root)
+hugo_site_dir: hugo-site
+content_dir: hugo-site/content/posts
+data_dir: data/daily
+
+# GitHub
+github_repo: kojirou-code/market-briefing
+github_pages_url: https://kojirou-code.github.io/market-briefing/
+
+# Retry settings
+retry_count: 3
+retry_delay_seconds: 5
+
+# Data fetch lookback (days) for technical analysis
+lookback_days: 100
+
+# Market tickers
+tickers:
+  us_indices:
+    - ticker: "^GSPC"
+      name: "S&P 500"
+      display_name: "S&P 500"
+    - ticker: "^IXIC"
+      name: "NASDAQ"
+      display_name: "NASDAQ"
+    - ticker: "^SOX"
+      name: "SOX"
+      display_name: "SOX（半導体）"
+  jp_indices:
+    - ticker: "^N225"
+      name: "Nikkei225"
+      display_name: "日経平均"
+    - ticker: "1306.T"
+      name: "TOPIX"
+      display_name: "TOPIX"
+    - ticker: "2516.T"
+      name: "Growth250"
+      display_name: "グロース250"
+  indicators:
+    - ticker: "^VIX"
+      name: "VIX"
+      display_name: "VIX"
+    - ticker: "^TNX"
+      name: "US10Y"
+      display_name: "米10年債"
+    - ticker: "JPY=X"
+      name: "USDJPY"
+      display_name: "USD/JPY"
+  futures_commodities:
+    - ticker: "NIY=F"
+      name: "NikkeiF"
+      display_name: "日経先物"
+    - ticker: "ES=F"
+      name: "SPF"
+      display_name: "S&P先物"
+    - ticker: "CL=F"
+      name: "Oil"
+      display_name: "原油（WTI）"
+    - ticker: "GC=F"
+      name: "Gold"
+      display_name: "金"

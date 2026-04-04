@@ -1,0 +1,13 @@
+# 異常値アラート閾値設定
+
+vix_surge_pct: 20.0         # VIX前日比+20%以上で警戒
+index_crash_pct: -2.0       # 指数前日比-2.0%以下で急落アラート
+index_surge_pct: 2.0        # 指数前日比+2.0%以上で急騰アラート
+usdjpy_move_pct: 1.5        # USD/JPY前日比±1.5%以上で円急変動アラート
+
+# VIX水準区分
+vix_levels:
+  low: 15.0       # 15以下: 安定
+  medium: 20.0    # 15-20: 中程度
+  high: 30.0      # 20-30: 警戒
+  extreme: 40.0   # 30以上: 極端な恐怖

@@ -1,0 +1,272 @@
+---
+title: "{{ title }}"
+date: {{ date_iso }}
+draft: false
+description: "{{ description }}"
+tags: ["daily", "market"]
+---
+
+{%- if alerts %}
+<div class="alert-box">
+
+{% for alert in alerts %}
+**{{ alert.emoji }} {{ alert.message }}**
+{% endfor %}
+
+</div>
+{%- endif %}
+
+## ダッシュボード
+
+<div class="market-grid">
+<div class="market-card">
+
+### 🇺🇸 米国市場
+
+{% for idx in us_indices %}
+<div class="market-row">
+<span class="market-name">{{ idx.display_name }}</span>
+<span class="market-value">
+  {%- if idx.error -%}
+  <span style="color:gray;">取得失敗</span>
+  {%- else -%}
+  {{ "%.2f"|format(idx.close) if idx.close else "—" }}
+  <span class="{{ 'change-positive' if idx.change_pct and idx.change_pct > 0 else 'change-negative' if idx.change_pct and idx.change_pct < 0 else 'change-neutral' }}">
+    {{ "%+.2f%%"|format(idx.change_pct) if idx.change_pct is not none else "—" }}
+  </span>
+  {{ idx.signal }}
+  {%- endif -%}
+</span>
+</div>
+{% endfor %}
+
+</div>
+<div class="market-card">
+
+### 🇯🇵 日本市場
+
+{% for idx in jp_indices %}
+<div class="market-row">
+<span class="market-name">{{ idx.display_name }}</span>
+<span class="market-value">
+  {%- if idx.error -%}
+  <span style="color:gray;">取得失敗</span>
+  {%- else -%}
+  {{ "%.2f"|format(idx.close) if idx.close else "—" }}
+  <span class="{{ 'change-positive' if idx.change_pct and idx.change_pct > 0 else 'change-negative' if idx.change_pct and idx.change_pct < 0 else 'change-neutral' }}">
+    {{ "%+.2f%%"|format(idx.change_pct) if idx.change_pct is not none else "—" }}
+  </span>
+  {{ idx.signal }}
+  {%- endif -%}
+</span>
+</div>
+{% endfor %}
+
+</div>
+</div>
+
+### 📊 主要指標
+
+<div class="indicators-row">
+{% for ind in indicators %}
+<div class="indicator-item">
+<span class="indicator-label">{{ ind.display_name }}</span>
+<span class="indicator-value">
+  {%- if ind.error -%}—
+  {%- elif ind.name == "USDJPY" -%}{{ "%.2f"|format(ind.value) if ind.value else "—" }}
+  {%- elif ind.name == "US10Y" -%}{{ "%.2f%%"|format(ind.value) if ind.value else "—" }}
+  {%- else -%}{{ "%.2f"|format(ind.value) if ind.value else "—" }}{% if ind.signal is defined %} {{ ind.signal }}{% endif %}
+  {%- endif -%}
+</span>
+{% if ind.change_pct is not none %}
+<span class="indicator-label {{ 'change-positive' if ind.change_pct > 0 else 'change-negative' if ind.change_pct < 0 else 'change-neutral' }}">
+  {{ "%+.2f%%"|format(ind.change_pct) }}
+</span>
+{% endif %}
+</div>
+{% endfor %}
+</div>
+
+### 🔮 先物・コモディティ
+
+<div class="indicators-row">
+{% for fc in futures_commodities %}
+<div class="indicator-item">
+<span class="indicator-label">{{ fc.display_name }}</span>
+<span class="indicator-value">
+  {%- if fc.error -%}—
+  {%- else -%}{{ "%.2f"|format(fc.value) if fc.value else "—" }}
+  {%- endif -%}
+</span>
+{% if fc.change_pct is not none %}
+<span class="indicator-label {{ 'change-positive' if fc.change_pct > 0 else 'change-negative' if fc.change_pct < 0 else 'change-neutral' }}">
+  {{ "%+.2f%%"|format(fc.change_pct) }}
+</span>
+{% endif %}
+</div>
+{% endfor %}
+</div>
+
+---
+
+### 📅 今週の重要イベント
+
+{% if calendar_events %}
+<ul class="calendar-list">
+{% for ev in calendar_events %}
+<li>
+<span class="calendar-date">{{ ev.date_str }}({{ ev.weekday }})</span>
+<span>{{ "🇺🇸" if ev.country == "US" else "🇯🇵" if ev.country == "JP" else "" }} {{ ev.event }}</span>
+{% if ev.importance == "high" %}<span style="color:#ef4444;font-size:0.75rem;"> ★重要</span>{% endif %}
+</li>
+{% endfor %}
+</ul>
+{% else %}
+<p style="color:gray;">直近イベントなし</p>
+{% endif %}
+
+---
+
+### 📰 注目ニュース TOP5
+
+{% if news_error %}
+<p style="color:gray;">ニュース取得失敗</p>
+{% elif news_top5 %}
+<ol class="news-list">
+{% for item in news_top5 %}
+<li>
+{% if item.url %}<a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>{% else %}{{ item.title }}{% endif %}
+<span class="news-source">（{{ item.source }}）</span>
+</li>
+{% endfor %}
+</ol>
+{% else %}
+<p style="color:gray;">ニュースなし</p>
+{% endif %}
+
+---
+
+<details class="detail-section">
+<summary>▼ テクニカル詳細</summary>
+
+### 米国市場テクニカル
+
+{% for tech in us_technical %}
+{% if not tech.error %}
+#### {{ tech.name }}
+
+<table class="tech-table">
+<thead>
+<tr><th>指標</th><th>シグナル</th><th>値</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>移動平均線 (SMA 5/25/75)</td>
+<td>{{ tech.sma.signal }}</td>
+<td style="font-size:0.8rem;">
+  5: {{ "%.1f"|format(tech.sma.sma5) if tech.sma.sma5 else "—" }} /
+  25: {{ "%.1f"|format(tech.sma.sma25) if tech.sma.sma25 else "—" }} /
+  75: {{ "%.1f"|format(tech.sma.sma75) if tech.sma.sma75 else "—" }}
+</td>
+</tr>
+<tr>
+<td>RSI (14)</td>
+<td>{{ tech.rsi.signal }}</td>
+<td>{{ "%.1f"|format(tech.rsi.value) if tech.rsi.value else "—" }}</td>
+</tr>
+<tr>
+<td>MACD (12,26,9)</td>
+<td>{{ tech.macd.signal }}</td>
+<td style="font-size:0.8rem;">
+  MACD: {{ "%.2f"|format(tech.macd.macd) if tech.macd.macd else "—" }} /
+  Signal: {{ "%.2f"|format(tech.macd.macd_signal) if tech.macd.macd_signal else "—" }}
+</td>
+</tr>
+<tr>
+<td>ボリンジャーバンド (20,2σ)</td>
+<td>{{ tech.bb.signal }}</td>
+<td style="font-size:0.8rem;">
+  上: {{ "%.1f"|format(tech.bb.upper) if tech.bb.upper else "—" }} /
+  下: {{ "%.1f"|format(tech.bb.lower) if tech.bb.lower else "—" }}
+</td>
+</tr>
+<tr>
+<td>出来高 (20MA比)</td>
+<td>{{ tech.volume.signal }}</td>
+<td>{{ "%.2f"|format(tech.volume.ratio) if tech.volume.ratio else "—" }}倍</td>
+</tr>
+</tbody>
+</table>
+
+{% else %}
+#### {{ tech.name }}
+
+<p style="color:gray;">テクニカルデータ取得失敗</p>
+
+{% endif %}
+{% endfor %}
+
+### 日本市場テクニカル
+
+{% for tech in jp_technical %}
+{% if not tech.error %}
+#### {{ tech.name }}
+
+<table class="tech-table">
+<thead>
+<tr><th>指標</th><th>シグナル</th><th>値</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>移動平均線 (SMA 5/25/75)</td>
+<td>{{ tech.sma.signal }}</td>
+<td style="font-size:0.8rem;">
+  5: {{ "%.1f"|format(tech.sma.sma5) if tech.sma.sma5 else "—" }} /
+  25: {{ "%.1f"|format(tech.sma.sma25) if tech.sma.sma25 else "—" }} /
+  75: {{ "%.1f"|format(tech.sma.sma75) if tech.sma.sma75 else "—" }}
+</td>
+</tr>
+<tr>
+<td>RSI (14)</td>
+<td>{{ tech.rsi.signal }}</td>
+<td>{{ "%.1f"|format(tech.rsi.value) if tech.rsi.value else "—" }}</td>
+</tr>
+<tr>
+<td>MACD (12,26,9)</td>
+<td>{{ tech.macd.signal }}</td>
+<td style="font-size:0.8rem;">
+  MACD: {{ "%.2f"|format(tech.macd.macd) if tech.macd.macd else "—" }} /
+  Signal: {{ "%.2f"|format(tech.macd.macd_signal) if tech.macd.macd_signal else "—" }}
+</td>
+</tr>
+<tr>
+<td>ボリンジャーバンド (20,2σ)</td>
+<td>{{ tech.bb.signal }}</td>
+<td style="font-size:0.8rem;">
+  上: {{ "%.1f"|format(tech.bb.upper) if tech.bb.upper else "—" }} /
+  下: {{ "%.1f"|format(tech.bb.lower) if tech.bb.lower else "—" }}
+</td>
+</tr>
+<tr>
+<td>出来高 (20MA比)</td>
+<td>{{ tech.volume.signal }}</td>
+<td>{{ "%.2f"|format(tech.volume.ratio) if tech.volume.ratio else "—" }}倍</td>
+</tr>
+</tbody>
+</table>
+
+{% else %}
+#### {{ tech.name }}
+
+<p style="color:gray;">テクニカルデータ取得失敗</p>
+
+{% endif %}
+{% endfor %}
+
+</details>
+
+---
+
+<p style="font-size:0.75rem;color:gray;">
+生成日時: {{ generated_at }} | データ: yfinance / RSS
+</p>

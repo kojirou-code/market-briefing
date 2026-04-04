@@ -1,0 +1,109 @@
+2026-04-04 18:15:28,399 [INFO] pipeline: ===== パイプライン開始: 2026-04-04 =====
+2026-04-04 18:15:28,401 [INFO] pipeline: [1] 市場データ取得
+2026-04-04 18:15:28,401 [INFO] generators.collectors.market_data: 市場データ取得開始
+2026-04-04 18:15:29,727 [ERROR] generators.collectors.market_data: 変化率計算エラー: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+2026-04-04 18:15:29,727 [INFO] generators.collectors.market_data: ^GSPC: 取得失敗
+2026-04-04 18:15:29,968 [ERROR] generators.collectors.market_data: 変化率計算エラー: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+2026-04-04 18:15:29,968 [INFO] generators.collectors.market_data: ^IXIC: 取得失敗
+2026-04-04 18:15:30,219 [ERROR] generators.collectors.market_data: 変化率計算エラー: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+2026-04-04 18:15:30,219 [INFO] generators.collectors.market_data: ^SOX: 取得失敗
+2026-04-04 18:15:30,487 [ERROR] generators.collectors.market_data: 変化率計算エラー: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+2026-04-04 18:15:30,487 [INFO] generators.collectors.market_data: ^N225: 取得失敗
+2026-04-04 18:15:30,657 [ERROR] generators.collectors.market_data: 変化率計算エラー: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+2026-04-04 18:15:30,657 [INFO] generators.collectors.market_data: 1306.T: 取得失敗
+2026-04-04 18:15:30,926 [ERROR] generators.collectors.market_data: 変化率計算エラー: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+2026-04-04 18:15:30,926 [INFO] generators.collectors.market_data: 2516.T: 取得失敗
+2026-04-04 18:15:30,926 [INFO] pipeline: [2] テクニカル分析
+2026-04-04 18:15:30,926 [WARNING] generators.analyzers.technical: S&P 500: データ不足（5行）
+2026-04-04 18:15:30,926 [WARNING] generators.analyzers.technical: NASDAQ: データ不足（5行）
+2026-04-04 18:15:30,926 [WARNING] generators.analyzers.technical: SOX（半導体）: データ不足（5行）
+2026-04-04 18:15:30,926 [WARNING] generators.analyzers.technical: 日経平均: データ不足（5行）
+2026-04-04 18:15:30,926 [WARNING] generators.analyzers.technical: TOPIX: データ不足（5行）
+2026-04-04 18:15:30,926 [WARNING] generators.analyzers.technical: グロース250: データ不足（5行）
+2026-04-04 18:15:30,926 [INFO] pipeline: [3] 指標・先物取得
+2026-04-04 18:15:30,926 [INFO] generators.collectors.futures_commodities: 指標・先物データ取得開始
+2026-04-04 18:15:31,072 [WARNING] generators.collectors.futures_commodities: ^VIX: attempt 1 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:15:36,253 [WARNING] generators.collectors.futures_commodities: ^VIX: attempt 2 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:15:41,444 [WARNING] generators.collectors.futures_commodities: ^VIX: attempt 3 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:15:41,444 [ERROR] generators.collectors.futures_commodities: ^VIX: 全リトライ失敗
+2026-04-04 18:15:41,579 [WARNING] generators.collectors.futures_commodities: ^TNX: attempt 1 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:15:47,124 [WARNING] generators.collectors.futures_commodities: ^TNX: attempt 2 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:15:52,406 [WARNING] generators.collectors.futures_commodities: ^TNX: attempt 3 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:15:52,407 [ERROR] generators.collectors.futures_commodities: ^TNX: 全リトライ失敗
+2026-04-04 18:15:52,837 [WARNING] generators.collectors.futures_commodities: JPY=X: attempt 1 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:15:58,354 [WARNING] generators.collectors.futures_commodities: JPY=X: attempt 2 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:16:03,618 [WARNING] generators.collectors.futures_commodities: JPY=X: attempt 3 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:16:03,618 [ERROR] generators.collectors.futures_commodities: JPY=X: 全リトライ失敗
+2026-04-04 18:16:03,834 [WARNING] generators.collectors.futures_commodities: NIY=F: attempt 1 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:16:09,238 [WARNING] generators.collectors.futures_commodities: NIY=F: attempt 2 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:16:14,436 [WARNING] generators.collectors.futures_commodities: NIY=F: attempt 3 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:16:14,436 [ERROR] generators.collectors.futures_commodities: NIY=F: 全リトライ失敗
+2026-04-04 18:16:14,680 [WARNING] generators.collectors.futures_commodities: ES=F: attempt 1 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:16:19,935 [WARNING] generators.collectors.futures_commodities: ES=F: attempt 2 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:16:25,019 [WARNING] generators.collectors.futures_commodities: ES=F: attempt 3 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:16:25,019 [ERROR] generators.collectors.futures_commodities: ES=F: 全リトライ失敗
+2026-04-04 18:16:25,252 [WARNING] generators.collectors.futures_commodities: CL=F: attempt 1 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:16:30,511 [WARNING] generators.collectors.futures_commodities: CL=F: attempt 2 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:16:35,668 [WARNING] generators.collectors.futures_commodities: CL=F: attempt 3 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:16:35,669 [ERROR] generators.collectors.futures_commodities: CL=F: 全リトライ失敗
+2026-04-04 18:16:36,189 [WARNING] generators.collectors.futures_commodities: GC=F: attempt 1 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:16:41,371 [WARNING] generators.collectors.futures_commodities: GC=F: attempt 2 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:16:46,444 [WARNING] generators.collectors.futures_commodities: GC=F: attempt 3 failed: float() argument must be a string or a real number, not 'Series'
+2026-04-04 18:16:46,445 [ERROR] generators.collectors.futures_commodities: GC=F: 全リトライ失敗
+2026-04-04 18:16:46,445 [INFO] pipeline: [4] ニュースRSS取得
+2026-04-04 18:16:46,920 [WARNING] generators.collectors.news_collector: RSS parse error for Reuters Business: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+2026-04-04 18:16:46,943 [WARNING] generators.collectors.news_collector: RSS parse error for Reuters Markets: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+2026-04-04 18:16:47,689 [INFO] generators.collectors.news_collector: CNBC Markets: 0件取得
+2026-04-04 18:16:47,707 [WARNING] generators.collectors.news_collector: RSS parse error for Reuters Japan: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+2026-04-04 18:16:48,499 [INFO] generators.collectors.news_collector: NHK経済: 7件取得
+2026-04-04 18:16:48,499 [INFO] generators.collectors.news_collector: ニュース取得完了: 全7件 → TOP5選別
+2026-04-04 18:16:48,499 [INFO] pipeline: [5] 経済カレンダー読み込み
+2026-04-04 18:16:48,502 [INFO] generators.collectors.economic_calendar: 経済カレンダー: 5件のイベントを返す（今日から14日以内）
+2026-04-04 18:16:48,503 [INFO] pipeline: [6] 異常値チェック
+2026-04-04 18:16:48,503 [INFO] generators.article.alert_checker: アラートチェック完了: 0件
+2026-04-04 18:16:48,503 [INFO] pipeline: [7] Markdown記事生成
+2026-04-04 18:16:48,524 [INFO] generators.article.article_builder: 記事生成完了: 4339文字
+2026-04-04 18:16:48,524 [INFO] generators.article.article_builder: 記事保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/content/posts/2026-04-04.md
+2026-04-04 18:16:48,524 [INFO] pipeline: dry-run / skip-deploy モード: 記事生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/content/posts/2026-04-04.md
+2026-04-04 18:16:48,524 [INFO] pipeline: ===== パイプライン完了（デプロイスキップ） =====
+2026-04-04 18:19:49,207 [INFO] pipeline: ===== パイプライン開始: 2026-04-04 =====
+2026-04-04 18:19:49,209 [INFO] pipeline: [1] 市場データ取得
+2026-04-04 18:19:49,209 [INFO] generators.collectors.market_data: 市場データ取得開始
+2026-04-04 18:19:49,842 [INFO] generators.collectors.market_data: ^GSPC: 6582.69 (+0.11%)
+2026-04-04 18:19:50,128 [INFO] generators.collectors.market_data: ^IXIC: 21879.18 (+0.18%)
+2026-04-04 18:19:50,401 [INFO] generators.collectors.market_data: ^SOX: 7833.39 (+0.40%)
+2026-04-04 18:19:50,685 [INFO] generators.collectors.market_data: ^N225: 53123.49 (+1.26%)
+2026-04-04 18:19:51,007 [INFO] generators.collectors.market_data: 1306.T: 386.60 (+0.94%)
+2026-04-04 18:19:51,316 [INFO] generators.collectors.market_data: 2516.T: 576.00 (+1.00%)
+2026-04-04 18:19:51,316 [INFO] pipeline: [2] テクニカル分析
+2026-04-04 18:19:53,238 [INFO] generators.analyzers.technical: S&P 500: テクニカル分析完了
+2026-04-04 18:19:53,239 [INFO] generators.analyzers.technical: NASDAQ: テクニカル分析完了
+2026-04-04 18:19:53,241 [INFO] generators.analyzers.technical: SOX（半導体）: テクニカル分析完了
+2026-04-04 18:19:53,242 [INFO] generators.analyzers.technical: 日経平均: テクニカル分析完了
+2026-04-04 18:19:53,243 [INFO] generators.analyzers.technical: TOPIX: テクニカル分析完了
+2026-04-04 18:19:53,245 [INFO] generators.analyzers.technical: グロース250: テクニカル分析完了
+2026-04-04 18:19:53,245 [INFO] pipeline: [3] 指標・先物取得
+2026-04-04 18:19:53,245 [INFO] generators.collectors.futures_commodities: 指標・先物データ取得開始
+2026-04-04 18:19:53,467 [INFO] generators.collectors.futures_commodities: ^VIX: 23.8700
+2026-04-04 18:19:53,617 [INFO] generators.collectors.futures_commodities: ^TNX: 4.3130
+2026-04-04 18:19:53,757 [INFO] generators.collectors.futures_commodities: JPY=X: 159.6320
+2026-04-04 18:19:53,904 [INFO] generators.collectors.futures_commodities: NIY=F: 53305.00
+2026-04-04 18:19:54,317 [INFO] generators.collectors.futures_commodities: ES=F: 6603.75
+2026-04-04 18:19:54,469 [INFO] generators.collectors.futures_commodities: CL=F: 111.54
+2026-04-04 18:19:54,652 [INFO] generators.collectors.futures_commodities: GC=F: 4651.50
+2026-04-04 18:19:54,652 [INFO] pipeline: [4] ニュースRSS取得
+2026-04-04 18:19:54,922 [WARNING] generators.collectors.news_collector: RSS parse error for Reuters Business: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+2026-04-04 18:19:54,946 [WARNING] generators.collectors.news_collector: RSS parse error for Reuters Markets: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+2026-04-04 18:19:56,278 [INFO] generators.collectors.news_collector: CNBC Markets: 0件取得
+2026-04-04 18:19:56,298 [WARNING] generators.collectors.news_collector: RSS parse error for Reuters Japan: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+2026-04-04 18:19:56,536 [INFO] generators.collectors.news_collector: NHK経済: 7件取得
+2026-04-04 18:19:56,536 [INFO] generators.collectors.news_collector: ニュース取得完了: 全7件 → TOP5選別
+2026-04-04 18:19:56,537 [INFO] pipeline: [5] 経済カレンダー読み込み
+2026-04-04 18:19:56,540 [INFO] generators.collectors.economic_calendar: 経済カレンダー: 5件のイベントを返す（今日から14日以内）
+2026-04-04 18:19:56,540 [INFO] pipeline: [6] 異常値チェック
+2026-04-04 18:19:56,541 [INFO] generators.article.alert_checker: アラートチェック完了: 0件
+2026-04-04 18:19:56,541 [INFO] pipeline: [7] Markdown記事生成
+2026-04-04 18:19:56,559 [INFO] generators.article.article_builder: 記事生成完了: 8172文字
+2026-04-04 18:19:56,560 [INFO] generators.article.article_builder: 記事保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/content/posts/2026-04-04.md
+2026-04-04 18:19:56,560 [INFO] pipeline: dry-run / skip-deploy モード: 記事生成完了 → /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/content/posts/2026-04-04.md
+2026-04-04 18:19:56,560 [INFO] pipeline: ===== パイプライン完了（デプロイスキップ） =====

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.kojirou.market-briefing</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/opt/anaconda3/bin/python</string>
+    <string>/Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/generators/pipeline.py</string>
+  </array>
+
+  <!-- 毎朝 05:00 JST 実行 -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>5</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+
+  <!-- 作業ディレクトリ -->
+  <key>WorkingDirectory</key>
+  <string>/Volumes/WD Blue SN500 2TB/projects/investing/market-briefing</string>
+
+  <!-- ログ -->
+  <key>StandardOutPath</key>
+  <string>/Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/data/logs/launchd_stdout.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/data/logs/launchd_stderr.log</string>
+
+  <!-- 環境変数（メール通知用） -->
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/opt/anaconda3/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    <!-- 以下は ~/Library/LaunchAgents/ にコピー後に直接編集してください -->
+    <!-- <key>BRIEFING_EMAIL_FROM</key> <string>your@gmail.com</string> -->
+    <!-- <key>BRIEFING_EMAIL_TO</key>   <string>your@gmail.com</string> -->
+    <!-- <key>BRIEFING_EMAIL_PASSWORD</key> <string>xxxx-xxxx-xxxx-xxxx</string> -->
+  </dict>
+
+  <key>RunAtLoad</key>
+  <false/>
+
+</dict>
+</plist>

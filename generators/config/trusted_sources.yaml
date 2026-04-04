@@ -1,0 +1,31 @@
+# ニュースRSS信頼ソースホワイトリスト（Phase 1）
+
+rss_feeds:
+  - name: "Reuters Business"
+    url: "https://feeds.reuters.com/reuters/businessNews"
+    category: "米国金融"
+    language: "en"
+  - name: "Reuters Markets"
+    url: "https://feeds.reuters.com/reuters/USmarket"
+    category: "米国金融"
+    language: "en"
+  - name: "CNBC Markets"
+    url: "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10000664"
+    category: "米国金融"
+    language: "en"
+  - name: "Reuters Japan"
+    url: "https://feeds.reuters.com/reuters/JPbusiness"
+    category: "日本金融"
+    language: "ja"
+  - name: "NHK経済"
+    url: "https://www3.nhk.or.jp/rss/news/cat4.xml"
+    category: "日本金融"
+    language: "ja"
+
+# 1ソースあたり最大取得件数
+max_items_per_feed: 10
+
+# TOP5選択時の優先順位（カテゴリ）
+priority_categories:
+  - "米国金融"
+  - "日本金融"

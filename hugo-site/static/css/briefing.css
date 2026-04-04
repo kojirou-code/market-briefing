@@ -1,0 +1,228 @@
+/* Daily Market Briefing — Custom Styles */
+
+/* ===== Dashboard Layout ===== */
+.market-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.market-card {
+  background: var(--entry);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+}
+
+.market-card h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  color: var(--secondary);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+}
+
+/* ===== Alert Box ===== */
+.alert-box {
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-left: 4px solid #ff9800;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+}
+
+.dark .alert-box {
+  background: #3a2f00;
+  border-color: #ffc107;
+}
+
+.alert-box p {
+  margin: 0.25rem 0;
+}
+
+/* ===== Market Row ===== */
+.market-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.market-row:last-child {
+  border-bottom: none;
+}
+
+.market-name {
+  font-weight: 500;
+  min-width: 120px;
+}
+
+.market-value {
+  font-family: monospace;
+  font-size: 0.95rem;
+}
+
+.change-positive { color: #22c55e; }
+.change-negative { color: #ef4444; }
+.change-neutral  { color: #f59e0b; }
+
+/* ===== Signal Traffic Light ===== */
+.signal-green  { color: #22c55e; font-size: 1.1em; }
+.signal-yellow { color: #f59e0b; font-size: 1.1em; }
+.signal-red    { color: #ef4444; font-size: 1.1em; }
+
+/* ===== Technical Table ===== */
+.tech-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  margin: 0.5rem 0;
+}
+
+.tech-table th {
+  text-align: left;
+  padding: 0.3rem 0.5rem;
+  color: var(--secondary);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border);
+}
+
+.tech-table td {
+  padding: 0.3rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ===== News List ===== */
+.news-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.news-list li {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+.news-list li:last-child {
+  border-bottom: none;
+}
+
+.news-source {
+  color: var(--secondary);
+  font-size: 0.8rem;
+  margin-left: 0.5rem;
+}
+
+/* ===== Event Calendar ===== */
+.calendar-list {
+  list-style: none;
+  padding: 0;
+}
+
+.calendar-list li {
+  display: flex;
+  gap: 1rem;
+  padding: 0.3rem 0;
+  font-size: 0.875rem;
+}
+
+.calendar-date {
+  font-weight: 600;
+  min-width: 80px;
+  color: var(--secondary);
+}
+
+/* ===== Section Divider ===== */
+.section-divider {
+  margin: 2rem 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--border);
+}
+
+/* ===== Indicators Row ===== */
+.indicators-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0.75rem 0;
+}
+
+.indicator-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 100px;
+  padding: 0.5rem;
+  background: var(--entry);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.indicator-label {
+  font-size: 0.75rem;
+  color: var(--secondary);
+}
+
+.indicator-value {
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+/* ===== Responsive: Mobile ===== */
+@media (max-width: 767px) {
+  .market-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .indicators-row {
+    gap: 0.5rem;
+  }
+
+  .indicator-item {
+    min-width: 80px;
+    padding: 0.4rem;
+  }
+
+  .tech-table {
+    font-size: 0.8rem;
+  }
+
+  .market-name {
+    min-width: 90px;
+  }
+}
+
+/* ===== Responsive: Tablet ===== */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .market-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ===== Detail Section (collapsible) ===== */
+.detail-section {
+  margin: 2rem 0;
+}
+
+details summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 0.5rem 0;
+  color: var(--primary);
+}
+
+details summary:hover {
+  color: var(--link);
+}
+
+details[open] summary {
+  margin-bottom: 1rem;
+}
