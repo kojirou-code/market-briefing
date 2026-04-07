@@ -2,9 +2,14 @@
 credit_margin.py — 信用残高データ取得（Phase 2）
 
 取得戦略（graceful degradation）:
-  1. JPX公開ページからCSVリンクを探してダウンロード
+  1. JPX公式XLSを直接ダウンロード（金曜日基準、翌週水曜日公開）
   2. kabutanスクレイピング
   3. 前回キャッシュを使用
+
+JPX XLS URL パターン:
+  https://www.jpx.co.jp/markets/statistics-equities/margin/
+  tvdivq0000001rk9-att/mtseisan{YYYYMMDD}00.xls
+  （YYYYMMDD は金曜日の日付。翌週水曜日（金曜+5日）に公開）
 
 データ保存先: data/credit_margin/YYYY-MM-DD.json
               data/credit_margin/latest.json（フォールバック用）
@@ -14,7 +19,7 @@ import json
 import logging
 import re
 import time
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -27,9 +32,10 @@ TIMEOUT = 10
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 CACHE_DIR = PROJECT_ROOT / "data" / "credit_margin"
 
-# JPX信用残高インデックスページ
-JPX_MARGIN_INDEX_URL = (
-    "https://www.jpx.co.jp/markets/statistics-equities/margin/index.html"
+# JPX XLS 直接ダウンロードURL（{date} は金曜日の YYYYMMDD）
+JPX_XLS_URL_TEMPLATE = (
+    "https://www.jpx.co.jp/markets/statistics-equities/margin/"
+    "tvdivq0000001rk9-att/mtseisan{date}00.xls"
 )
 
 # kabutan信用残高ページ（フォールバック）
@@ -75,161 +81,198 @@ def _load_cache() -> dict[str, Any] | None:
         return None
 
 
-def _fetch_jpx_csv() -> dict[str, Any] | None:
-    """JPXページからCSVリンクを取得してダウンロード・解析する。
+def _get_candidate_fridays(target_date: date, count: int = 3) -> list[date]:
+    """対象日から遡って利用可能な金曜日のリストを返す（新しい順）。
+
+    JPXのXLSデータは金曜日基準。その翌週水曜日（金曜+5日）に公開される。
+    公開日（金曜+5日）<= 対象日 の金曜日のみリストアップする。
+
+    Args:
+        target_date: 基準日
+        count: 返す金曜日の数
 
     Returns:
-        成功時は信用残高データ辞書、失敗時は None。
+        利用可能な金曜日のリスト（新しい順）
     """
-    try:
-        import requests
-        from bs4 import BeautifulSoup
-        import pandas as pd
-    except ImportError as e:
-        logger.warning(f"requests/bs4/pandas が利用できません: {e}")
-        return None
+    candidates: list[date] = []
+    # target_date 以前の最新の金曜日を探す（target_date が金曜日なら当日）
+    d = target_date
+    while d.weekday() != 4:  # 4 = Friday
+        d -= timedelta(days=1)
 
-    for attempt in range(MAX_RETRIES):
-        try:
-            resp = requests.get(
-                JPX_MARGIN_INDEX_URL,
-                headers=HEADERS,
-                timeout=TIMEOUT,
-            )
-            resp.raise_for_status()
-            soup = BeautifulSoup(resp.text, "html.parser")
+    checked = 0
+    while len(candidates) < count and checked < 52:  # 最大1年分チェック
+        # 金曜日 d のデータは d+5日（水曜日）に公開
+        release_date = d + timedelta(days=5)
+        if release_date <= target_date:
+            candidates.append(d)
+        d -= timedelta(days=7)
+        checked += 1
 
-            # CSVリンクを探す（href に .csv が含まれるか、data-csv 属性など）
-            csv_url = None
-            for a in soup.find_all("a", href=True):
-                href = a["href"]
-                if "data.csv" in href.lower() or (
-                    "margin" in href.lower() and "csv" in href.lower()
-                ):
-                    if href.startswith("http"):
-                        csv_url = href
-                    else:
-                        csv_url = "https://www.jpx.co.jp" + href
-                    break
+    return candidates
 
-            if not csv_url:
-                # nls形式のリンクを探す
-                for a in soup.find_all("a", href=True):
-                    href = a["href"]
-                    if "nlsgeu" in href and "att" in href:
-                        if href.startswith("http"):
-                            csv_url = href
-                        else:
-                            csv_url = "https://www.jpx.co.jp" + href
-                        break
 
-            if not csv_url:
-                logger.warning(f"JPX: CSVリンク見つからず (attempt {attempt + 1})")
-                if attempt < MAX_RETRIES - 1:
-                    time.sleep(RETRY_DELAY)
-                continue
+def _extract_margin_from_sheet(
+    df: "pd.DataFrame", data_date: date
+) -> dict[str, Any] | None:
+    """DataFrameから信用残高データを抽出する（合計行を探す）。
 
-            logger.info(f"JPX CSV URL: {csv_url}")
-            csv_resp = requests.get(csv_url, headers=HEADERS, timeout=TIMEOUT)
-            csv_resp.raise_for_status()
-            # エンコーディングはShift-JISの場合が多い
-            csv_resp.encoding = csv_resp.apparent_encoding or "shift_jis"
+    JPX XLS の「合計」行には全市場合計の信用買い残・売り残・倍率が記載される。
+    単位は百万円のため、1,000,000 で除して兆円に変換する。
 
-            from io import StringIO
-            df = pd.read_csv(StringIO(csv_resp.text), encoding=csv_resp.encoding)
+    Args:
+        df: header=None で読み込んだ DataFrame
+        data_date: データの基準日（金曜日）
 
-            return _parse_jpx_csv(df)
+    Returns:
+        解析成功時はデータ辞書、失敗時は None。
+    """
+    total_keywords = ["合計", "東証計", "市場全体", "全市場", "total"]
 
-        except Exception as e:
-            logger.warning(f"JPX CSV取得失敗 (attempt {attempt + 1}): {e}")
-            if attempt < MAX_RETRIES - 1:
-                time.sleep(RETRY_DELAY)
+    for _idx, row in df.iterrows():
+        row_text = " ".join(str(v) for v in row.values if str(v) != "nan")
+        if not any(kw in row_text for kw in total_keywords):
+            continue
+
+        # 行から正の数値を抽出
+        numeric_vals: list[float] = []
+        for val in row:
+            try:
+                cleaned = str(val).replace(",", "").strip()
+                num = float(cleaned)
+                if num > 0:
+                    numeric_vals.append(num)
+            except (ValueError, TypeError):
+                pass
+
+        if len(numeric_vals) < 2:
+            continue
+
+        sorted_vals = sorted(numeric_vals, reverse=True)
+        buy_raw = sorted_vals[0]
+        sell_raw = sorted_vals[1] if len(sorted_vals) >= 2 else None
+
+        # 500,000（百万円）以上 = 0.5兆円以上 → 百万円単位と判定
+        # それ未満は千株単位など別フォーマットとみなしスキップ
+        if buy_raw < 500_000:
+            continue
+
+        buy_trillion = buy_raw / 1_000_000
+        sell_trillion = sell_raw / 1_000_000 if sell_raw else None
+
+        # 合理性チェック（信用買い残は通常 1〜30 兆円程度）
+        if not (0.1 <= buy_trillion <= 30.0):
+            continue
+
+        # 信用倍率（0.1〜50 程度。買い残・売り残より小さい値）
+        ratio = None
+        for val in numeric_vals:
+            if 0.1 <= val <= 50.0:
+                ratio = round(val, 2)
+                break
+
+        return {
+            "margin_buy": round(buy_trillion, 2),
+            "margin_sell": round(sell_trillion, 2) if sell_trillion else None,
+            "margin_ratio": ratio,
+            "data_date": data_date.strftime("%Y-%m-%d"),
+            "source": "JPX",
+            "error": False,
+        }
 
     return None
 
 
-def _parse_jpx_csv(df: "pd.DataFrame") -> dict[str, Any] | None:
-    """JPX CSVデータを解析して信用残高を抽出する。
+def _parse_jpx_xls(xls_bytes: bytes, data_date: date) -> dict[str, Any] | None:
+    """JPX XLSバイトデータを解析して信用残高を抽出する。
 
-    JPX CSV の主なフォーマット:
-      列: 週末日, 市場区分, 信用買い残(千株), 信用売り残(千株), 信用倍率
-      または: 週末日, 市場区分, 信用買い残(百万円), 信用売り残(百万円), 信用倍率
+    全シートを走査し、最初に合計行が見つかったシートのデータを返す。
+
+    Args:
+        xls_bytes: XLSファイルのバイト列
+        data_date: データの基準日（金曜日）
 
     Returns:
         解析成功時はデータ辞書、失敗時は None。
     """
     try:
-        # 列名を正規化
-        df.columns = [str(c).strip() for c in df.columns]
+        import io
+        import pandas as pd
+    except ImportError as e:
+        logger.warning(f"pandas が利用できません: {e}")
+        return None
 
-        # 「市場全体」または「東証計」の最新行を抽出
-        market_keywords = ["市場全体", "東証計", "全市場", "合計", "total"]
-        target_row = None
-        for kw in market_keywords:
-            mask = df.apply(
-                lambda row: any(kw in str(v) for v in row), axis=1
-            )
-            if mask.any():
-                target_row = df[mask].iloc[-1]
-                break
+    try:
+        xls_file = io.BytesIO(xls_bytes)
+        xl = pd.ExcelFile(xls_file, engine="xlrd")
 
-        if target_row is None:
-            # フォールバック: 先頭または最後の有効な行
-            target_row = df.dropna(how="all").iloc[-1]
-
-        # 信用買い残・売り残・倍率を数値列から抽出
-        numeric_vals = []
-        for val in target_row:
+        for sheet_name in xl.sheet_names:
             try:
-                cleaned = str(val).replace(",", "").strip()
-                numeric_vals.append(float(cleaned))
-            except (ValueError, TypeError):
-                numeric_vals.append(None)
+                df = xl.parse(sheet_name, header=None)
+            except Exception:
+                continue
 
-        # 有効な数値が3つ以上あれば解析
-        valid_nums = [v for v in numeric_vals if v is not None and v > 0]
-        if len(valid_nums) < 2:
-            logger.warning("JPX CSV: 有効な数値が不足")
-            return None
+            result = _extract_margin_from_sheet(df, data_date)
+            if result is not None:
+                logger.info(
+                    f"JPX XLS解析成功 (シート: {sheet_name}): "
+                    f"買い残={result['margin_buy']:.2f}兆円"
+                )
+                return result
 
-        # 大きい順に買い残・売り残（単位: 百万円 or 千株）
-        # 信用倍率は通常 0.5〜20 程度
-        # 最大値が百万円単位なので、兆円に変換
-        sorted_vals = sorted(valid_nums, reverse=True)
-        buy_raw = sorted_vals[0]   # 信用買い残（最大値）
-        sell_raw = sorted_vals[1]  # 信用売り残
-
-        # 百万円 → 兆円変換（1兆円 = 1,000,000百万円）
-        buy_trillion = buy_raw / 1_000_000
-        sell_trillion = sell_raw / 1_000_000
-
-        # 信用倍率 (1-20の範囲の値を探す)
-        ratio = None
-        for val in valid_nums:
-            if 0.1 <= val <= 50.0:
-                ratio = val
-                break
-
-        # 合理性チェック（信用買い残は通常1〜30兆円程度）
-        if buy_trillion > 100 or buy_trillion < 0.001:
-            logger.warning(f"JPX CSV: 信用買い残の値が不合理: {buy_trillion:.2f}兆円")
-            return None
-
-        logger.info(
-            f"JPX CSV解析成功: 買い残={buy_trillion:.2f}兆円, "
-            f"売り残={sell_trillion:.2f}兆円, 倍率={ratio}"
-        )
-        return {
-            "margin_buy": round(buy_trillion, 2),
-            "margin_sell": round(sell_trillion, 2),
-            "margin_ratio": round(ratio, 2) if ratio else None,
-            "source": "JPX",
-            "error": False,
-        }
+        logger.warning("JPX XLS: 全シートで合計行が見つかりませんでした")
+        return None
 
     except Exception as e:
-        logger.warning(f"JPX CSV解析エラー: {e}")
+        logger.warning(f"JPX XLS解析エラー: {e}")
         return None
+
+
+def _fetch_jpx_xls(target_date: date) -> dict[str, Any] | None:
+    """JPX公式XLSを直接ダウンロードして解析する。
+
+    直近3週分の金曜日を新しい順に試みる。404 の場合は次の金曜日へ。
+
+    Args:
+        target_date: 記事の対象日付（候補金曜日の決定に使用）
+
+    Returns:
+        成功時はデータ辞書、失敗時は None。
+    """
+    try:
+        import requests
+    except ImportError as e:
+        logger.warning(f"requests が利用できません: {e}")
+        return None
+
+    fridays = _get_candidate_fridays(target_date, count=3)
+    if not fridays:
+        logger.warning("JPX XLS: 利用可能な金曜日が見つかりません")
+        return None
+
+    for friday in fridays:
+        date_str = friday.strftime("%Y%m%d")
+        url = JPX_XLS_URL_TEMPLATE.format(date=date_str)
+        logger.info(f"JPX XLS試行: {url}")
+
+        try:
+            resp = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
+            if resp.status_code == 404:
+                logger.info(f"JPX XLS: 404 → スキップ ({date_str})")
+                continue
+            resp.raise_for_status()
+
+            result = _parse_jpx_xls(resp.content, friday)
+            if result is not None:
+                logger.info(f"JPX XLS取得成功: {friday}")
+                return result
+            else:
+                logger.warning(f"JPX XLS: 解析失敗 ({date_str}) → 次の週を試みる")
+
+        except Exception as e:
+            logger.warning(f"JPX XLS取得失敗 ({date_str}): {e}")
+
+    return None
 
 
 def _fetch_kabutan_credit() -> dict[str, Any] | None:
@@ -277,7 +320,6 @@ def _parse_kabutan_credit(soup: "BeautifulSoup") -> dict[str, Any] | None:
         解析成功時はデータ辞書、失敗時は None。
     """
     try:
-        # 「兆円」「億円」を含むテキストを検索
         buy_trillion = None
         sell_trillion = None
         ratio = None
@@ -331,13 +373,11 @@ def _parse_kabutan_credit(soup: "BeautifulSoup") -> dict[str, Any] | None:
                     for i, cell in enumerate(cells):
                         cell_text = cell.get_text(strip=True)
                         if "買い残" in cell_text or "買残" in cell_text:
-                            # 次のセルに数値がある可能性
                             if i + 1 < len(cells):
                                 val_text = cells[i + 1].get_text(strip=True)
                                 val_text = re.sub(r"[^\d.]", "", val_text)
                                 if val_text:
                                     val = float(val_text)
-                                    # 兆円単位か億円単位かを判定
                                     if val < 100:  # おそらく兆円
                                         buy_trillion = val
                                     else:  # おそらく億円
@@ -381,24 +421,24 @@ def fetch_credit_margin(target_date: date) -> dict[str, Any]:
     """信用残高データを取得する。
 
     取得戦略（graceful degradation）:
-      1. JPX公開CSVを試みる
+      1. JPX公式XLS直接ダウンロード（直近3週の金曜日を試行）
       2. kabutanスクレイピングを試みる
       3. 前回キャッシュを使用する
       全失敗時: error=True を返す
 
     Args:
-        target_date: 記事の対象日付（キャッシュ保存に使用）
+        target_date: 記事の対象日付（キャッシュ保存・金曜日算出に使用）
 
     Returns:
         {
-            "margin_buy": float | None,    # 信用買い残（兆円）
-            "margin_sell": float | None,   # 信用売り残（兆円）
-            "margin_ratio": float | None,  # 信用倍率
+            "margin_buy": float | None,     # 信用買い残（兆円）
+            "margin_sell": float | None,    # 信用売り残（兆円）
+            "margin_ratio": float | None,   # 信用倍率
             "buy_change_pct": float | None, # 前週比（%）
-            "data_date": str | None,       # データ基準日
-            "source": str,                 # データソース
+            "data_date": str | None,        # データ基準日（金曜日）
+            "source": str,                  # データソース
             "error": bool,
-            "cached": bool,                # キャッシュデータの場合 True
+            "cached": bool,                 # キャッシュデータの場合 True
         }
     """
     logger.info("信用残高データ取得開始")
@@ -406,18 +446,18 @@ def fetch_credit_margin(target_date: date) -> dict[str, Any]:
     # 前回キャッシュ（前週比計算用・フォールバック用）
     prev_cache = _load_cache()
 
-    # 1. JPX CSV
-    data = _fetch_jpx_csv()
+    # 1. JPX XLS 直接ダウンロード
+    data = _fetch_jpx_xls(target_date)
     if data is not None and not data.get("error"):
         data["buy_change_pct"] = _calc_change_pct(data.get("margin_buy"), prev_cache)
-        data["data_date"] = target_date.strftime("%Y-%m-%d")
+        data.setdefault("data_date", target_date.strftime("%Y-%m-%d"))
         data["cached"] = False
         _save_cache(data, target_date)
-        logger.info(f"JPX CSV取得成功: {data}")
+        logger.info(f"JPX XLS取得成功: {data}")
         return data
 
     # 2. kabutan フォールバック
-    logger.info("JPX CSV失敗 → kabutan フォールバック")
+    logger.info("JPX XLS失敗 → kabutan フォールバック")
     data = _fetch_kabutan_credit()
     if data is not None and not data.get("error"):
         data["buy_change_pct"] = _calc_change_pct(data.get("margin_buy"), prev_cache)
