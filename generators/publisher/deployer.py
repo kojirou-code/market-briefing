@@ -49,8 +49,8 @@ def deploy(project_root: str | Path, target_date: date | None = None) -> bool:
     project_root = Path(project_root)
     commit_msg = f"briefing: {target_date.strftime('%Y-%m-%d')}"
 
-    # git add
-    ok, out = _run_git(["add", "hugo-site/content/posts/"], cwd=project_root)
+    # git add（記事・チャート画像・ビルド済みHTML・ニュースデータをまとめて追加）
+    ok, out = _run_git(["add", "hugo-site/", "data/"], cwd=project_root)
     if not ok:
         logger.error(f"git add 失敗: {out}")
         return False
