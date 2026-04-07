@@ -30,7 +30,8 @@
       "Bash(/opt/anaconda3/bin/python -c \"import matplotlib; from matplotlib import font_manager; fonts = [f.name for f in font_manager.fontManager.ttflist if ''Hiragino'' in f.name or ''Noto Sans JP'' in f.name]; print\\(''JP fonts in matplotlib:'', fonts[:5]\\)\")",
       "Bash(/opt/anaconda3/bin/python -m pytest \"/Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/tests/\" --collect-only -q)",
       "Bash(/opt/anaconda3/bin/pip install mplfinance)",
-      "Bash(/opt/anaconda3/bin/python -c \"import mplfinance; print\\(mplfinance.__version__\\)\")"
+      "Bash(/opt/anaconda3/bin/python -c \"import mplfinance; print\\(mplfinance.__version__\\)\")",
+      "Bash(/opt/anaconda3/bin/python3 -c \":*)"
     ]
   }
 }
