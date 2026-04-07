@@ -4,13 +4,15 @@ import json
 import sys
 from datetime import date
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, call, patch
 
 import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from generators.collectors.gemini_summarizer import (
+    MAX_API_RETRIES,
+    RETRY_DELAY_SEC,
     _format_news_list,
     generate_news_summary,
     save_summary,
@@ -197,9 +199,71 @@ class TestGenerateNewsSummary:
 
         with patch("generators.collectors.gemini_summarizer._load_dotenv"):
             with patch("google.genai.Client", return_value=mock_client):
-                result = generate_news_summary(self._make_news_items())
+                with patch("generators.collectors.gemini_summarizer.time.sleep"):
+                    result = generate_news_summary(self._make_news_items())
 
         assert result is None
+
+    def test_retries_max_times_on_api_error(self, monkeypatch):
+        """APIエラーで MAX_API_RETRIES 回リトライしてから None を返す。"""
+        monkeypatch.setenv("GEMINI_API_KEY", "test_key")
+
+        mock_client = MagicMock()
+        mock_client.models.generate_content.side_effect = Exception("503 Service Unavailable")
+
+        with patch("generators.collectors.gemini_summarizer._load_dotenv"):
+            with patch("google.genai.Client", return_value=mock_client):
+                with patch("generators.collectors.gemini_summarizer.time.sleep") as mock_sleep:
+                    result = generate_news_summary(self._make_news_items())
+
+        assert result is None
+        # 呼び出し回数: 初回 + MAX_API_RETRIES 回リトライ
+        assert mock_client.models.generate_content.call_count == MAX_API_RETRIES + 1
+        # sleep は MAX_API_RETRIES 回呼ばれる（最後の失敗後は呼ばない）
+        assert mock_sleep.call_count == MAX_API_RETRIES
+        mock_sleep.assert_called_with(RETRY_DELAY_SEC)
+
+    def test_succeeds_on_second_attempt(self, monkeypatch):
+        """初回失敗・2回目成功でサマリーを返す。"""
+        monkeypatch.setenv("GEMINI_API_KEY", "test_key")
+
+        mock_response = MagicMock()
+        mock_response.text = json.dumps(VALID_SUMMARY)
+
+        mock_client = MagicMock()
+        mock_client.models.generate_content.side_effect = [
+            Exception("503 Service Unavailable"),  # 1回目: 失敗
+            mock_response,                          # 2回目: 成功
+        ]
+
+        with patch("generators.collectors.gemini_summarizer._load_dotenv"):
+            with patch("google.genai.Client", return_value=mock_client):
+                with patch("generators.collectors.gemini_summarizer.time.sleep") as mock_sleep:
+                    result = generate_news_summary(self._make_news_items(), date(2026, 4, 4))
+
+        assert result is not None
+        assert "conclusion" in result
+        assert mock_client.models.generate_content.call_count == 2
+        assert mock_sleep.call_count == 1  # 1回だけ待機
+
+    def test_no_retry_on_json_decode_error(self, monkeypatch):
+        """JSONDecodeError ではリトライせず即 None を返す。"""
+        monkeypatch.setenv("GEMINI_API_KEY", "test_key")
+
+        mock_response = MagicMock()
+        mock_response.text = "not valid json"
+
+        mock_client = MagicMock()
+        mock_client.models.generate_content.return_value = mock_response
+
+        with patch("generators.collectors.gemini_summarizer._load_dotenv"):
+            with patch("google.genai.Client", return_value=mock_client):
+                with patch("generators.collectors.gemini_summarizer.time.sleep") as mock_sleep:
+                    result = generate_news_summary(self._make_news_items())
+
+        assert result is None
+        assert mock_client.models.generate_content.call_count == 1  # リトライなし
+        mock_sleep.assert_not_called()
 
 
 # ============================================================

@@ -12,6 +12,7 @@ APIキー: .env の GEMINI_API_KEY（python-dotenvで読み込み）
 import json
 import logging
 import os
+import time
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -22,6 +23,8 @@ _PROJECT_ROOT = Path(__file__).parent.parent.parent
 NEWS_DATA_DIR = _PROJECT_ROOT / "data" / "news"
 
 GEMINI_MODEL = "gemini-2.5-flash"
+MAX_API_RETRIES = 3       # 最大リトライ回数
+RETRY_DELAY_SEC = 30      # リトライ間隔（秒）
 
 SUMMARY_PROMPT_TEMPLATE = """\
 あなたは日本在住の個人投資家向けに、日米マーケットの連動を前提として \
@@ -140,32 +143,44 @@ def generate_news_summary(
     news_list_text = _format_news_list(news_items)
     prompt = SUMMARY_PROMPT_TEMPLATE.format(news_list=news_list_text)
 
-    try:
-        import google.genai as genai
+    for attempt in range(MAX_API_RETRIES + 1):
+        try:
+            import google.genai as genai
 
-        client = genai.Client(api_key=api_key)
-        response = client.models.generate_content(
-            model=GEMINI_MODEL,
-            contents=prompt,
-        )
+            client = genai.Client(api_key=api_key)
+            response = client.models.generate_content(
+                model=GEMINI_MODEL,
+                contents=prompt,
+            )
 
-        raw_text = response.text.strip()
+            raw_text = response.text.strip()
 
-        # JSONブロック除去（```json ... ``` の場合）
-        if raw_text.startswith("```"):
-            lines = raw_text.split("\n")
-            raw_text = "\n".join(lines[1:-1] if lines[-1].strip() == "```" else lines[1:])
+            # JSONブロック除去（```json ... ``` の場合）
+            if raw_text.startswith("```"):
+                lines = raw_text.split("\n")
+                raw_text = "\n".join(lines[1:-1] if lines[-1].strip() == "```" else lines[1:])
 
-        summary = json.loads(raw_text)
-        logger.info(f"Geminiサマリー生成完了: {len(str(summary))}文字")
-        return summary
+            summary = json.loads(raw_text)
+            logger.info(f"Geminiサマリー生成完了: {len(str(summary))}文字")
+            return summary
 
-    except json.JSONDecodeError as e:
-        logger.error(f"Gemini出力のJSONパース失敗: {e}\n出力: {raw_text[:200]}")
-        return None
-    except Exception as e:
-        logger.error(f"Gemini API呼び出しエラー: {e}")
-        return None
+        except json.JSONDecodeError as e:
+            logger.error(f"Gemini出力のJSONパース失敗: {e}\n出力: {raw_text[:200]}")
+            return None  # JSONエラーはリトライしない
+
+        except Exception as e:
+            if attempt < MAX_API_RETRIES:
+                logger.warning(
+                    f"Gemini APIエラー（リトライ {attempt + 1}/{MAX_API_RETRIES}、"
+                    f"{RETRY_DELAY_SEC}秒後に再試行）: {e}"
+                )
+                time.sleep(RETRY_DELAY_SEC)
+            else:
+                logger.error(
+                    f"Gemini API呼び出しエラー（{MAX_API_RETRIES}回リトライ失敗）: {e}"
+                )
+
+    return None
 
 
 def save_summary(summary: dict[str, Any], target_date: date | None = None) -> None:
