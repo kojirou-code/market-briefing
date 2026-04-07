@@ -142,6 +142,11 @@ def run_pipeline(
     settings = load_settings()
     failed_step = None
 
+    # Phase 2 需給変数: [P2-5]より前に参照（[6]異常値チェック）されるため先に初期化
+    credit_margin_data: dict | None = None
+    jpx_breadth_data: dict | None = None
+    fundamental_chart_url: str | None = None
+
     try:
         # [1] 市場データ取得
         logger.info("[1] 市場データ取得")

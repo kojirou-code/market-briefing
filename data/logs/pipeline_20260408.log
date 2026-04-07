@@ -218,3 +218,5 @@
 2026-04-08 04:00:53,271 [INFO] pipeline: [8] Hugo build
 2026-04-08 04:00:53,606 [INFO] generators.publisher.hugo_builder: Hugo ビルド成功 (attempt 1)
 2026-04-08 04:00:53,606 [INFO] pipeline: [9] git push → GitHub Pages デプロイ
+2026-04-08 04:00:55,197 [INFO] generators.publisher.deployer: git push 成功 (attempt 1): briefing: 2026-04-08
+2026-04-08 04:00:55,198 [INFO] pipeline: ===== パイプライン完了 =====
