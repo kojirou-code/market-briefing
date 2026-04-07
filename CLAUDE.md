@@ -6,44 +6,35 @@
 ## 技術スタック
 - Python: /opt/anaconda3/bin/python (conda)
 - Hugo / GitHub Pages / pytest
-- pandas-ta / yfinance / feedparser / Jinja2
-- matplotlib 3.10.8（NumPy 1.26.4 対応版）
+- pandas-ta / yfinance / feedparser / Jinja2 / mplfinance
+- Gemini API (gemini-2.5-flash) / google-generativeai / python-dotenv
 ## コーディング規約
 - docstring + 型ヒント
 - エラーハンドリング（リトライ3回 → graceful degradation）
 - 各collectorは独立して失敗可能（1つ失敗しても他は継続）
-- Phase 3以降のスタブには # TODO: Phase N とコメント
-## Phase 1 完了状況（2026-04-04）
-- 全13ティッカー取得 + テクニカル分析（信号機） ✅
+- スクレイピングは必ずフォールバックを実装
+## Phase 1〜2 完了状況（2026-04-07）
+- yfinance 13ティッカー + テクニカル信号機 ✅
+- ローソク足チャート日足1年+週足3年（mplfinance）✅
+- セクターETF騰落（米国11セクター）✅
+- Fear & Greed自作スコア ✅
+- 方向性推定スコア ✅
 - 異常値アラート ✅
-- RSSヘッドライン（NHK経済のみ稼働） ✅
-- 経済カレンダー（YAML手動） ✅
-- Jinja2 → Markdown → Hugo build → GitHub Pages ✅
-- launchd（毎朝5:00）✅
-- pytest 49テスト全パス ✅
-## Phase 2 完了状況（2026-04-04）
-- matplotlibチャート生成（6指数×60日、SMA5/25/75 + 出来高） ✅
-- セクターETF騰落率（米国11セクター: XLK〜XLC）✅
-- Fear & Greed 自作スコア（VIX/モメンタム/RSI/MACD/52週高低値 複合）✅
-- 方向性推定スコア（テクニカル+F&G統合、-10〜+10点）✅
-- 週間まとめ記事（土曜日自動生成 / --weekly オプション）✅
-- RSS修正（Reuters削除→Yahoo Finance/MarketWatch追加、CNBC URL正規化）✅
-- matplotlib NumPy互換問題解消（matplotlib 3.10.8 + NumPy 1.26.4 に更新）✅
-- pytest 116テスト全パス ✅
-## Phase 3 実装状況（2026-04-04）
-- Google News RSSキーワード検索（日本語・英語）に刷新 ✅
-- data/news/YYYY-MM-DD.json への蓄積（4回/日 → --news-only オプション） ✅
-- Gemini API（gemini-2.5-flash）によるニュースサマリー生成 ✅
-- summary_YYYY-MM-DD.json に保存、テンプレートで構造化表示 ✅
-- TOPIXデータ異常修正（df_long統一で価格スケール一致） ✅
-- launchd plist追加（12:00/18:00/23:00 ニュース収集） ✅
-- Google Newsキーワードを4クエリ分割（JP/EN × 経済・金融/地政学） ✅
-- NHK国際 / BBC World / AP国際ニュース 直接RSS追加（地政学カバレッジ強化） ✅
-- TOP5選別に地政学補充ロジック追加 ✅
-- Geminiプロンプトに地政学必須ルール追加 ✅
-- pytest 169テスト全パス ✅
+- Google News RSS（経済+地政学 4クエリ）+ NHK国際 + BBC World ✅
+- Gemini APIニュースサマリー（リトライ3回付き）✅
+- 経済カレンダー（YAML手動）✅
+- Hugo build → GitHub Pages デプロイ ✅
+- launchd 4:00/6:30 2回実行 + ニュース12:00/18:00/23:00 ✅
+- deployer.py: hugo-site/ + data/ を git add ✅
+- pytest 200テスト全パス ✅
+- トップページカード改善（S&P/日経+Gemini結論）✅
+- 信号機凡例追加 ✅
+- TOPIX不連続データ補正 ✅
+- Hugo unsafe HTML有効化 ✅
+## Phase 2 残り（未実装）
+- 需給データ（信用残・騰落レシオ・新高値新安値）
+- ファンダメンタル指標推移チャート（VIX/債券/為替/原油 90日）
+- 経済カレンダー自動取得（investing.comスクレイピング）
 ## 既知の課題
-- Reuters RSS: feeds.reuters.com が全ドメインでアクセス不可（削除済み）
-- numexpr 2.8.7 が古い（Pandas推奨は 2.10.2+）→ 動作に影響なし
-- bottleneck 1.3.7 が古い（Pandas推奨は 1.4.2+）→ 動作に影響なし
-- google.generativeai は非推奨、google-genai（google.genai）に移行済み
+- AP International RSS: syntax errorで取得失敗（NHK/BBCでカバー）
+- Google News EN 経済: 0件の場合あり（地政学ENでカバー）
