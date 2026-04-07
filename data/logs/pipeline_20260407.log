@@ -637,3 +637,19 @@ UnboundLocalError: cannot access local variable 'jpx_breadth_data' where it is n
 2026-04-07 20:32:01,833 [INFO] pipeline: [8] Hugo build
 2026-04-07 20:32:02,182 [INFO] generators.publisher.hugo_builder: Hugo ビルド成功 (attempt 1)
 2026-04-07 20:32:02,183 [INFO] pipeline: [9] git push → GitHub Pages デプロイ
+2026-04-07 20:32:04,381 [INFO] generators.publisher.deployer: git push 成功 (attempt 1): briefing: 2026-04-07
+2026-04-07 20:32:04,381 [INFO] pipeline: ===== パイプライン完了 =====
+2026-04-07 23:00:04,788 [INFO] pipeline: ===== ニュース取得のみ実行: 2026-04-07 =====
+2026-04-07 23:00:07,119 [INFO] generators.collectors.news_collector: Google News JP 経済: 0件取得
+2026-04-07 23:00:08,138 [INFO] generators.collectors.news_collector: Google News JP 地政学: 20件取得
+2026-04-07 23:00:09,067 [INFO] generators.collectors.news_collector: Google News EN 経済: 1件取得
+2026-04-07 23:00:10,393 [INFO] generators.collectors.news_collector: Google News EN 地政学: 20件取得
+2026-04-07 23:00:10,393 [INFO] generators.collectors.news_collector: Google News取得完了: 41件 → 重複除去後41件
+2026-04-07 23:00:12,020 [INFO] generators.collectors.news_collector: NHK国際: 15件取得
+2026-04-07 23:00:12,886 [INFO] generators.collectors.news_collector: BBC World: 15件取得
+2026-04-07 23:00:13,429 [WARNING] generators.collectors.news_collector: RSS parse error for AP International: <unknown>:2:0: syntax error
+2026-04-07 23:00:13,429 [INFO] generators.collectors.news_collector: 国際RSS取得完了: 30件 → 重複除去後30件
+2026-04-07 23:00:13,429 [INFO] generators.collectors.news_collector: 全ニュース統合: 71件
+2026-04-07 23:00:13,433 [INFO] generators.collectors.news_collector: ニュース保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/data/news/2026-04-07.json (124件既存 + 15件追加 = 139件)
+2026-04-07 23:00:13,434 [INFO] pipeline: ニュース取得・保存完了: 139件
+2026-04-07 23:00:13,435 [INFO] pipeline: ===== ニュース取得完了 =====
