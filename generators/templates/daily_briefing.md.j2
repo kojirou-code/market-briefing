@@ -286,22 +286,25 @@ tags: ["daily", "market"]
 
 {%- set _us_ticker = us_indices[loop.index0].ticker if us_indices|length > loop.index0 else None %}
 {%- set _us_pair = chart_urls.get(_us_ticker, {}) if chart_urls and _us_ticker else {} %}
-{%- if _us_pair %}
+{% if _us_pair %}
+
+
 <div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;">
-  {%- if _us_pair.get("daily") %}
+  {% if _us_pair.get("daily") %}
   <div style="flex:1;min-width:280px;">
     <img src="{{ _us_pair.get('daily') }}" alt="{{ tech.name }} 日次チャート（1年）" style="width:100%;border-radius:4px;">
     <p style="font-size:0.7rem;color:gray;text-align:center;margin:2px 0;">日次・1年（SMA5/25/75）</p>
   </div>
-  {%- endif %}
-  {%- if _us_pair.get("weekly") %}
+  {% endif %}
+  {% if _us_pair.get("weekly") %}
   <div style="flex:1;min-width:280px;">
     <img src="{{ _us_pair.get('weekly') }}" alt="{{ tech.name }} 週次チャート（3年）" style="width:100%;border-radius:4px;">
     <p style="font-size:0.7rem;color:gray;text-align:center;margin:2px 0;">週次・3年（SMA13/26/52）</p>
   </div>
-  {%- endif %}
+  {% endif %}
 </div>
-{%- endif %}
+
+{% endif %}
 
 <table class="tech-table">
 <thead>
@@ -362,22 +365,25 @@ tags: ["daily", "market"]
 
 {%- set _jp_ticker = jp_indices[loop.index0].ticker if jp_indices|length > loop.index0 else None %}
 {%- set _jp_pair = chart_urls.get(_jp_ticker, {}) if chart_urls and _jp_ticker else {} %}
-{%- if _jp_pair %}
+{% if _jp_pair %}
+
+
 <div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;">
-  {%- if _jp_pair.get("daily") %}
+  {% if _jp_pair.get("daily") %}
   <div style="flex:1;min-width:280px;">
     <img src="{{ _jp_pair.get('daily') }}" alt="{{ tech.name }} 日次チャート（1年）" style="width:100%;border-radius:4px;">
     <p style="font-size:0.7rem;color:gray;text-align:center;margin:2px 0;">日次・1年（SMA5/25/75）</p>
   </div>
-  {%- endif %}
-  {%- if _jp_pair.get("weekly") %}
+  {% endif %}
+  {% if _jp_pair.get("weekly") %}
   <div style="flex:1;min-width:280px;">
     <img src="{{ _jp_pair.get('weekly') }}" alt="{{ tech.name }} 週次チャート（3年）" style="width:100%;border-radius:4px;">
     <p style="font-size:0.7rem;color:gray;text-align:center;margin:2px 0;">週次・3年（SMA13/26/52）</p>
   </div>
-  {%- endif %}
+  {% endif %}
 </div>
-{%- endif %}
+
+{% endif %}
 
 <table class="tech-table">
 <thead>
