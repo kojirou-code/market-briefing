@@ -31,8 +31,15 @@ def check_alerts(
     market_data: dict,
     indicators_data: dict,
     thresholds_path: str,
+    jpx_breadth_data: dict | None = None,
 ) -> list[dict[str, Any]]:
     """全データをチェックしてアラートリストを返す。
+
+    Args:
+        market_data:      fetch_all_market_data() の戻り値
+        indicators_data:  fetch_all_indicators_and_futures() の戻り値
+        thresholds_path:  alert_thresholds.yaml のパス
+        jpx_breadth_data: fetch_jpx_market_breadth() の戻り値（Phase 2、省略可）
 
     Returns:
         [
@@ -110,6 +117,27 @@ def check_alerts(
                 "emoji": "⚠️",
                 "message": f"USD/JPY {usdjpy_change:+.2f}% — {direction}",
             })
+
+    # 騰落レシオアラート（Phase 2: jpx_breadth_data が渡された場合のみ）
+    if jpx_breadth_data and not jpx_breadth_data.get("error"):
+        ad_ratio = jpx_breadth_data.get("advance_decline_ratio")
+        ad_high = thresholds.get("advance_decline_ratio_high", 130.0)
+        ad_low = thresholds.get("advance_decline_ratio_low", 70.0)
+        if ad_ratio is not None:
+            if ad_ratio >= ad_high:
+                alerts.append({
+                    "level": "warning",
+                    "emoji": "⚠️",
+                    "message": f"騰落レシオ {ad_ratio:.1f} — 過熱圏（{ad_high:.0f}超）",
+                })
+                logger.warning(f"騰落レシオアラート(過熱): {ad_ratio:.1f}")
+            elif ad_ratio <= ad_low:
+                alerts.append({
+                    "level": "info",
+                    "emoji": "📉",
+                    "message": f"騰落レシオ {ad_ratio:.1f} — 底値圏（{ad_low:.0f}未満）",
+                })
+                logger.info(f"騰落レシオアラート(底値): {ad_ratio:.1f}")
 
     logger.info(f"アラートチェック完了: {len(alerts)}件")
     return alerts

@@ -251,6 +251,156 @@ def generate_chart_pair(
     return result
 
 
+def generate_fundamental_charts(
+    target_date: date,
+    static_dir: Path,
+    base_url_path: str = "",
+) -> str | None:
+    """VIX / 米10年債 / USD/JPY / 原油(WTI) の90日推移チャートを2×2グリッドで生成する。
+
+    Args:
+        target_date:    記事日付（チャート保存ディレクトリ名）
+        static_dir:     hugo-site/static/ ディレクトリ
+        base_url_path:  HugoのbaseURLパス部分（例: "/market-briefing"）
+
+    Returns:
+        生成したチャート画像のURL文字列。生成できなければ None。
+    """
+    if not MATPLOTLIB_AVAILABLE:
+        return None
+
+    import yfinance as yf
+    import time as _time
+
+    TICKERS = [
+        ("^VIX",  "VIX",        "#ef5350"),  # 赤
+        ("^TNX",  "米10年債(%)", "#42a5f5"),  # 青
+        ("JPY=X", "USD/JPY",    "#66bb6a"),  # 緑
+        ("CL=F",  "原油(WTI)",  "#ffb74d"),  # オレンジ
+    ]
+
+    date_str = target_date.strftime("%Y-%m-%d")
+    chart_dir = static_dir / "charts" / date_str
+    chart_dir.mkdir(parents=True, exist_ok=True)
+    out_path = chart_dir / "fundamental_trends.png"
+
+    try:
+        fig, axes = plt.subplots(
+            2, 2,
+            figsize=(10, 6),
+            facecolor="#1e1e1e",
+        )
+        fig.patch.set_facecolor("#1e1e1e")
+        axes_flat = axes.flatten()
+
+        plotted = 0
+        for i, (ticker, label, color) in enumerate(TICKERS):
+            ax = axes_flat[i]
+            ax.set_facecolor("#1e1e1e")
+            ax.tick_params(colors="#aaaaaa", labelsize=7)
+            ax.spines["bottom"].set_color("#444444")
+            ax.spines["top"].set_color("#444444")
+            ax.spines["left"].set_color("#444444")
+            ax.spines["right"].set_color("#444444")
+
+            try:
+                data = yf.download(
+                    ticker,
+                    period="120d",
+                    progress=False,
+                    auto_adjust=True,
+                )
+                if data is not None and not data.empty:
+                    # MultiIndex正規化
+                    if isinstance(data.columns, pd.MultiIndex):
+                        data = data.droplevel(level=1, axis=1)
+                    close = data["Close"].dropna()
+                    # 直近90日分を使用
+                    close = close.iloc[-90:]
+                    if len(close) >= 5:
+                        with warnings.catch_warnings():
+                            warnings.simplefilter("ignore")
+                            ax.plot(
+                                close.index,
+                                close.values,
+                                color=color,
+                                linewidth=1.2,
+                                zorder=2,
+                            )
+                        # 水平の最新値ライン
+                        ax.axhline(
+                            y=float(close.iloc[-1]),
+                            color=color,
+                            linewidth=0.6,
+                            linestyle="--",
+                            alpha=0.5,
+                        )
+                        ax.set_title(
+                            label,
+                            fontname=JP_FONT_NAME,
+                            fontsize=9,
+                            color="#dddddd",
+                            pad=4,
+                        )
+                        ax.grid(
+                            True,
+                            color="#333333",
+                            linestyle="--",
+                            linewidth=0.5,
+                            alpha=0.7,
+                        )
+                        # X軸ラベル: 最初・中間・最後の3点のみ
+                        n = len(close)
+                        tick_indices = [0, n // 2, n - 1]
+                        ax.set_xticks(
+                            [close.index[j] for j in tick_indices if j < n]
+                        )
+                        ax.xaxis.set_major_formatter(
+                            plt.matplotlib.dates.DateFormatter("%m/%d")
+                        )
+                        plotted += 1
+                        _time.sleep(0.5)  # APIレート制限対策
+                        continue
+            except Exception as e:
+                logger.warning(f"{ticker}: ファンダメンタルチャートデータ取得失敗: {e}")
+
+            # データ取得失敗時のプレースホルダー
+            ax.text(
+                0.5, 0.5, f"{label}\nデータなし",
+                transform=ax.transAxes,
+                ha="center", va="center",
+                color="#666666", fontsize=9,
+                fontname=JP_FONT_NAME,
+            )
+            ax.set_xticks([])
+            ax.set_yticks([])
+
+        plt.tight_layout(pad=1.5)
+        fig.savefig(
+            str(out_path),
+            dpi=100,
+            bbox_inches="tight",
+            facecolor=fig.get_facecolor(),
+        )
+        plt.close(fig)
+
+        if plotted == 0:
+            logger.warning("ファンダメンタルチャート: 全指標のデータ取得失敗")
+            return None
+
+        url = f"{base_url_path}/charts/{date_str}/fundamental_trends.png"
+        logger.info(f"ファンダメンタルチャート生成完了 ({plotted}/4指標): {out_path.name}")
+        return url
+
+    except Exception as e:
+        logger.error(f"ファンダメンタルチャート生成エラー: {e}")
+        try:
+            plt.close("all")
+        except Exception:
+            pass
+        return None
+
+
 def generate_all_charts(
     market_data: dict[str, Any],
     chart_data: dict[str, dict[str, pd.DataFrame | None]],

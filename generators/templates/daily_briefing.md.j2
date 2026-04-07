@@ -143,6 +143,56 @@ description: "{{ description }}"
 </div>
 {%- endif %}
 
+{%- if (credit_margin_data and not credit_margin_data.error) or (jpx_breadth_data and not jpx_breadth_data.error) %}
+### 📉 需給データ（日本市場）
+
+<div class="indicators-row">
+{%- if credit_margin_data and not credit_margin_data.error %}
+<div class="indicator-item">
+<span class="indicator-label">信用買い残</span>
+<span class="indicator-value">
+  {%- if credit_margin_data.margin_buy -%}
+  {{ "%.2f"|format(credit_margin_data.margin_buy) }}兆円
+  {%- else -%}—{%- endif -%}
+</span>
+{%- if credit_margin_data.buy_change_pct is not none %}
+<span class="indicator-label {{ 'change-negative' if credit_margin_data.buy_change_pct > 0 else 'change-positive' if credit_margin_data.buy_change_pct < 0 else 'change-neutral' }}">
+  前週比 {{ "%+.1f%%"|format(credit_margin_data.buy_change_pct) }}
+</span>
+{%- endif %}
+{%- if credit_margin_data.cached %}<span style="font-size:0.7rem;color:gray;">（前回値）</span>{%- endif %}
+</div>
+<div class="indicator-item">
+<span class="indicator-label">信用倍率</span>
+<span class="indicator-value">
+  {%- if credit_margin_data.margin_ratio -%}{{ "%.2f"|format(credit_margin_data.margin_ratio) }}倍{%- else -%}—{%- endif -%}
+</span>
+</div>
+{%- endif %}
+{%- if jpx_breadth_data and not jpx_breadth_data.error %}
+<div class="indicator-item">
+<span class="indicator-label">騰落レシオ(25日)</span>
+<span class="indicator-value">
+  {%- if jpx_breadth_data.advance_decline_ratio -%}
+  {{ "%.1f"|format(jpx_breadth_data.advance_decline_ratio) }}
+  {%- else -%}—{%- endif -%}
+</span>
+<span class="indicator-label">{{ jpx_breadth_data.ad_signal }}</span>
+{%- if jpx_breadth_data.cached %}<span style="font-size:0.7rem;color:gray;">（前回値）</span>{%- endif %}
+</div>
+<div class="indicator-item">
+<span class="indicator-label">新高値 / 新安値</span>
+<span class="indicator-value">
+  {%- if jpx_breadth_data.new_high is not none -%}{{ jpx_breadth_data.new_high }}{%- else -%}—{%- endif -%}
+  &nbsp;/&nbsp;
+  {%- if jpx_breadth_data.new_low is not none -%}{{ jpx_breadth_data.new_low }}{%- else -%}—{%- endif -%}
+</span>
+</div>
+{%- endif %}
+</div>
+<p style="font-size:0.75rem;color:gray;">騰落レシオ: 130超=過熱圏 / 70未満=底値圏</p>
+{%- endif %}
+
 ---
 
 ### 📅 今週の重要イベント
@@ -277,6 +327,18 @@ description: "{{ description }}"
 {% endfor %}
 </tbody>
 </table>
+
+</details>
+{%- endif %}
+
+{%- if fundamental_chart_url %}
+<details class="detail-section">
+<summary>▼ ファンダメンタル指標推移（90日）</summary>
+
+<div style="margin:8px 0;">
+  <img src="{{ fundamental_chart_url }}" alt="VIX/米10年債/USD/JPY/原油 90日推移" style="width:100%;max-width:700px;border-radius:4px;">
+  <p style="font-size:0.7rem;color:gray;margin:2px 0;">VIX / 米10年債(%) / USD/JPY / 原油(WTI) — 直近90日</p>
+</div>
 
 </details>
 {%- endif %}

@@ -37,6 +37,8 @@ from generators.collectors.gemini_summarizer import generate_and_save_summary, l
 from generators.collectors.economic_calendar import load_upcoming_events
 from generators.collectors.sector_etf import fetch_sector_etfs
 from generators.collectors.market_breadth import fetch_market_breadth
+from generators.collectors.credit_margin import fetch_credit_margin
+from generators.collectors.market_breadth_jpx import fetch_jpx_market_breadth
 from generators.analyzers.technical import analyze_all_indices
 from generators.analyzers.direction_scorer import calculate_direction_score
 from generators.article.alert_checker import check_alerts
@@ -47,7 +49,7 @@ from generators.article.article_builder import (
     get_article_filename,
     get_weekly_article_filename,
 )
-from generators.article.chart_generator import generate_all_charts
+from generators.article.chart_generator import generate_all_charts, generate_fundamental_charts
 from generators.publisher.hugo_builder import build_hugo
 from generators.publisher.deployer import deploy
 from generators.notifier.email_notifier import send_failure_notification
@@ -183,7 +185,9 @@ def run_pipeline(
         if not weekly_mode:
             logger.info("[6] 異常値チェック")
             failed_step = "異常値チェック"
-            alerts = check_alerts(market_data, indicators_data, str(ALERT_THRESHOLDS_PATH))
+            alerts = check_alerts(
+                market_data, indicators_data, str(ALERT_THRESHOLDS_PATH), jpx_breadth_data
+            )
             if alerts:
                 logger.info(f"アラート {len(alerts)} 件検出")
         else:
@@ -204,8 +208,19 @@ def run_pipeline(
         logger.info("[P2-3] 方向性推定スコア計算")
         direction_score = calculate_direction_score(technical_data, breadth_data)
 
+        # [P2-5] 需給データ取得（失敗してもパイプラインは継続）
+        logger.info("[P2-5] 需給データ取得")
+        credit_margin_data = None
+        jpx_breadth_data = None
+        try:
+            credit_margin_data = fetch_credit_margin(target_date)
+            jpx_breadth_data = fetch_jpx_market_breadth(target_date)
+        except Exception as e:
+            logger.warning(f"需給データ取得エラー（スキップ）: {e}")
+
         # [P2-4] チャート生成（週間まとめ以外）
         chart_urls: dict[str, dict[str, str]] = {}
+        fundamental_chart_url: str | None = None
         if not weekly_mode:
             hugo_site_dir = PROJECT_ROOT / settings.get("hugo_site_dir", "hugo-site")
             static_dir = hugo_site_dir / "static"
@@ -236,6 +251,17 @@ def run_pipeline(
             chart_urls = generate_all_charts(
                 market_data, chart_data, target_date, static_dir, base_url_path
             )
+
+            # [P2-6] ファンダメンタルチャート生成（失敗してもパイプラインは継続）
+            logger.info("[P2-6] ファンダメンタルチャート生成")
+            try:
+                fundamental_chart_url = generate_fundamental_charts(
+                    target_date=target_date,
+                    static_dir=static_dir,
+                    base_url_path=base_url_path,
+                )
+            except Exception as e:
+                logger.warning(f"ファンダメンタルチャート生成エラー（スキップ）: {e}")
 
         # ===== 記事生成 =====
 
@@ -272,6 +298,9 @@ def run_pipeline(
                 direction_score=direction_score,
                 chart_urls=chart_urls,
                 news_summary=news_summary,
+                credit_margin_data=credit_margin_data,
+                jpx_breadth_data=jpx_breadth_data,
+                fundamental_chart_url=fundamental_chart_url,
             )
             filename = get_article_filename(target_date)
 

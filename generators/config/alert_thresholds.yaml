@@ -11,3 +11,7 @@ vix_levels:
   medium: 20.0    # 15-20: 中程度
   high: 30.0      # 20-30: 警戒
   extreme: 40.0   # 30以上: 極端な恐怖
+
+# 騰落レシオアラート（SPEC.md Phase 2）
+advance_decline_ratio_high: 130.0   # 130超: 過熱圏（警戒）
+advance_decline_ratio_low: 70.0     # 70未満: 底値圏（注目）

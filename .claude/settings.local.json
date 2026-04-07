@@ -31,7 +31,11 @@
       "Bash(/opt/anaconda3/bin/python -m pytest \"/Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/tests/\" --collect-only -q)",
       "Bash(/opt/anaconda3/bin/pip install mplfinance)",
       "Bash(/opt/anaconda3/bin/python -c \"import mplfinance; print\\(mplfinance.__version__\\)\")",
-      "Bash(/opt/anaconda3/bin/python3 -c \":*)"
+      "Bash(/opt/anaconda3/bin/python3 -c \":*)",
+      "Bash(/opt/anaconda3/bin/python generators/pipeline.py --date 2026-04-07 --dry-run)",
+      "Bash(/opt/anaconda3/bin/python -c \"import requests; import bs4; print\\(''requests:'', requests.__version__\\); print\\(''bs4:'', bs4.__version__\\)\")",
+      "Bash(/opt/anaconda3/bin/python -m pytest tests/test_fundamental_charts.py tests/test_market_breadth_jpx.py tests/test_credit_margin.py -v --tb=short)",
+      "Bash(/opt/anaconda3/bin/python -m pytest tests/ --tb=short -q)"
     ]
   }
 }

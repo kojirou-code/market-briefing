@@ -130,6 +130,9 @@ def build_article(
     direction_score: dict | None = None,
     chart_urls: dict[str, dict[str, str]] | None = None,
     news_summary: dict | None = None,
+    credit_margin_data: dict | None = None,
+    jpx_breadth_data: dict | None = None,
+    fundamental_chart_url: str | None = None,
 ) -> str:
     """全データをまとめてMarkdown記事を生成する。
 
@@ -184,11 +187,18 @@ def build_article(
         # 経済カレンダー
         "calendar_events": calendar_events,
 
-        # Phase 2
+        # Phase 2: 基本
         "sector_data": sector_data,
         "fear_greed": fear_greed,
         "direction_score": direction_score,
         "chart_urls": chart_urls or {},
+
+        # Phase 2: 需給データ
+        "credit_margin_data": credit_margin_data,
+        "jpx_breadth_data": jpx_breadth_data,
+
+        # Phase 2: ファンダメンタルチャート
+        "fundamental_chart_url": fundamental_chart_url,
 
         # Gemini サマリー（あれば TOP5 を置き換えて表示）
         "news_summary": news_summary,
