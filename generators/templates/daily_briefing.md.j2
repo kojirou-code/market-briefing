@@ -18,6 +18,8 @@ tags: ["daily", "market"]
 
 ## ダッシュボード
 
+<p style="font-size:0.75rem;color:gray;">🟢 強気（前日比+1%以上 / テクニカル強気）　🟡 中立（前日比±1%未満 / テクニカル中立）　🔴 弱気（前日比−1%以下 / テクニカル弱気）　🟠 警戒（VIX 20超 / F&amp;G 40未満）</p>
+
 <div class="market-grid">
 <div class="market-card">
 
@@ -117,6 +119,8 @@ tags: ["daily", "market"]
 
 {%- if direction_score %}
 ### 🧭 方向性推定
+
+<p style="font-size:0.75rem;color:gray;">+7〜+10: 強気　+3〜+6: やや強気　−2〜+2: 中立　−6〜−3: やや弱気　−7〜−10: 弱気</p>
 
 <div class="indicators-row">
 <div class="indicator-item">
@@ -277,6 +281,8 @@ tags: ["daily", "market"]
 
 <details class="detail-section">
 <summary>▼ テクニカル詳細</summary>
+
+<p style="font-size:0.75rem;color:gray;">シグナル凡例: 🟢 強気シグナル　🟡 中立　🔴 弱気シグナル　⚪ データなし</p>
 
 ### 米国市場テクニカル
 
@@ -462,7 +468,8 @@ tags: ["daily", "market"]
 </table>
 
 <p style="font-size:0.8rem;color:gray;">
-Fear & Greed: {{ direction_score.fg_raw }} ({{ direction_score.fg_label }})
+Fear &amp; Greed: {{ direction_score.fg_raw }} ({{ direction_score.fg_label }})<br>
+スコア凡例: +7〜+10: 強気　+3〜+6: やや強気　−2〜+2: 中立　−6〜−3: やや弱気　−7〜−10: 弱気<br>
 スコアは参考値です。投資判断の最終確認は各自でお願いします。
 </p>
 {%- endif %}
