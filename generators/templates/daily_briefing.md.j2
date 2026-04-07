@@ -3,7 +3,9 @@ title: "{{ title }}"
 date: {{ date_iso }}
 draft: false
 description: "{{ description }}"
-tags: ["daily", "market"]
+{% if card_summary %}summary: |
+  {{ card_summary | replace("\n", "\n  ") }}
+{% endif %}tags: ["daily", "market"]
 ---
 
 {%- if alerts %}

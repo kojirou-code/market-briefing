@@ -19,6 +19,65 @@ logger = logging.getLogger(__name__)
 TEMPLATE_DIR = Path(__file__).parent.parent / "templates"
 
 
+def _build_card_summary(
+    market_data: dict,
+    news_summary: dict | None = None,
+) -> str:
+    """PaperMod トップページカード用サマリー文字列を生成する。
+
+    Args:
+        market_data: fetch_all_market_data() の戻り値
+        news_summary: Gemini サマリー辞書（なければ None）
+
+    Returns:
+        YAML front matter の summary フィールド用文字列。
+        市場行（S&P / 日経）＋ Gemini conclusion 先頭文。
+        データ取得失敗時は空文字列。
+    """
+    parts: list[str] = []
+
+    # S&P 500
+    sp = next(
+        (idx for idx in market_data.get("us_indices", [])
+         if "GSPC" in idx.get("ticker", "") and not idx.get("error")),
+        None,
+    )
+    if sp and sp.get("close"):
+        close_str = f"{sp['close']:,.0f}"
+        chg_str = f"{sp['change_pct']:+.2f}%" if sp.get("change_pct") is not None else ""
+        sig = sp.get("signal", "")
+        parts.append(f"🇺🇸 S&P {close_str} {chg_str} {sig}".strip())
+
+    # 日経平均
+    nk = next(
+        (idx for idx in market_data.get("jp_indices", [])
+         if "N225" in idx.get("ticker", "") and not idx.get("error")),
+        None,
+    )
+    if nk and nk.get("close"):
+        close_str = f"{nk['close']:,.0f}"
+        chg_str = f"{nk['change_pct']:+.2f}%" if nk.get("change_pct") is not None else ""
+        sig = nk.get("signal", "")
+        parts.append(f"🇯🇵 日経 {close_str} {chg_str} {sig}".strip())
+
+    if not parts:
+        return ""
+
+    market_line = "　".join(parts)
+
+    # Gemini conclusion 先頭1文（100文字以内）
+    if news_summary and news_summary.get("conclusion"):
+        conclusion = news_summary["conclusion"]
+        if "。" in conclusion:
+            first_sent = conclusion.split("。")[0] + "。"
+            conclusion = first_sent if len(first_sent) <= 100 else conclusion[:100] + "…"
+        else:
+            conclusion = conclusion[:100] + ("…" if len(conclusion) > 100 else "")
+        return f"{market_line}\n{conclusion}"
+
+    return market_line
+
+
 def _format_date_title(target_date: date) -> str:
     """記事タイトル用の日付フォーマット。"""
     weekdays = ["月", "火", "水", "木", "金", "土", "日"]
@@ -100,6 +159,7 @@ def build_article(
         "title": _format_date_title(target_date),
         "date_iso": target_date.strftime("%Y-%m-%dT05:00:00+09:00"),
         "description": f"{target_date.month}月{target_date.day}日の市場概況",
+        "card_summary": _build_card_summary(market_data, news_summary),
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M JST"),
 
         # 市場データ

@@ -12,6 +12,7 @@ from generators.article.article_builder import (
     build_article,
     get_article_filename,
     _format_date_title,
+    _build_card_summary,
 )
 
 
@@ -128,6 +129,84 @@ class TestBuildArticle:
         ctx["news_data"] = {"top5": [], "all_items": [], "error": True}
         result = build_article(**ctx, target_date=date(2026, 4, 4))
         assert "取得失敗" in result
+
+
+class TestBuildCardSummary:
+    def _make_market_data(self):
+        return {
+            "us_indices": [
+                {"ticker": "^GSPC", "close": 5800.0, "change_pct": 0.72, "signal": "🟢", "error": False}
+            ],
+            "jp_indices": [
+                {"ticker": "^N225", "close": 38500.0, "change_pct": -0.31, "signal": "🟡", "error": False}
+            ],
+        }
+
+    def test_includes_sp500(self):
+        """S&P 500の値が含まれること。"""
+        result = _build_card_summary(self._make_market_data())
+        assert "S&P" in result
+        assert "5,800" in result
+
+    def test_includes_nikkei(self):
+        """日経平均の値が含まれること。"""
+        result = _build_card_summary(self._make_market_data())
+        assert "日経" in result
+        assert "38,500" in result
+
+    def test_includes_signals(self):
+        """信号機絵文字が含まれること。"""
+        result = _build_card_summary(self._make_market_data())
+        assert "🟢" in result
+        assert "🟡" in result
+
+    def test_includes_conclusion_when_provided(self):
+        """Gemini conclusionがある場合は2行目に含まれること。"""
+        news_summary = {"conclusion": "本日は関税リスクに警戒が必要。米中間の貿易摩擦が続く。"}
+        result = _build_card_summary(self._make_market_data(), news_summary)
+        assert "\n" in result
+        assert "本日は関税リスクに警戒が必要。" in result
+
+    def test_conclusion_truncated_at_100_chars(self):
+        """conclusionが100文字超の場合は省略されること。"""
+        long_conclusion = "あ" * 150  # 句点なし
+        news_summary = {"conclusion": long_conclusion}
+        result = _build_card_summary(self._make_market_data(), news_summary)
+        lines = result.split("\n")
+        assert len(lines[1]) <= 102  # 100文字 + "…"
+
+    def test_returns_empty_on_no_data(self):
+        """データが空の場合は空文字列を返すこと。"""
+        result = _build_card_summary({"us_indices": [], "jp_indices": []})
+        assert result == ""
+
+    def test_no_conclusion_when_no_news_summary(self):
+        """news_summaryがNoneの場合は市場行のみ（改行なし）。"""
+        result = _build_card_summary(self._make_market_data(), None)
+        assert "\n" not in result
+
+
+class TestBuildArticleSummary:
+    def test_summary_in_frontmatter(self):
+        """front matter に summary: が含まれること。"""
+        ctx = make_minimal_context()
+        result = build_article(**ctx, target_date=date(2026, 4, 7))
+        # front matter 部分のみ抽出
+        fm = result.split("---")[1]
+        assert "summary:" in fm
+        assert "S&P" in fm
+
+    def test_summary_includes_conclusion(self):
+        """news_summary がある場合、conclusion が summary に含まれること。"""
+        ctx = make_minimal_context()
+        ctx["news_summary"] = {
+            "conclusion": "本日は関税リスクに警戒。",
+            "political_news": [], "economic_news": [],
+            "market_perspective": {"us_summary": "", "jp_summary": "", "us_jp_linkage": ""},
+        }
+        result = build_article(**ctx, target_date=date(2026, 4, 7))
+        fm = result.split("---")[1]
+        assert "本日は関税リスクに警戒。" in fm
 
 
 class TestHelpers:
