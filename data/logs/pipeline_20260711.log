@@ -170,3 +170,12 @@
 2026-07-11 06:30:52,783 [INFO] pipeline: [8] Hugo build
 2026-07-11 06:30:54,218 [INFO] generators.publisher.hugo_builder: Hugo ビルド成功 (attempt 1)
 2026-07-11 06:30:54,219 [INFO] pipeline: [9] git push → GitHub Pages デプロイ
+2026-07-11 06:30:58,290 [INFO] generators.publisher.deployer: git push 成功 (attempt 1): briefing: 2026-07-11
+2026-07-11 06:30:58,291 [INFO] pipeline: ===== パイプライン完了 =====
+2026-07-11 12:00:07,427 [INFO] pipeline: ===== ニュース取得のみ実行: 2026-07-11 =====
+2026-07-11 12:00:08,456 [INFO] generators.collectors.news_collector: Google News JP 経済: 19件取得
+2026-07-11 12:00:09,219 [INFO] generators.collectors.news_collector: Google News JP 地政学: 19件取得
+2026-07-11 12:00:10,094 [INFO] generators.collectors.news_collector: Google News EN 経済: 1件取得
+2026-07-11 12:00:11,061 [INFO] generators.collectors.news_collector: Google News EN 地政学: 16件取得
+2026-07-11 12:00:11,062 [INFO] generators.collectors.news_collector: Google News取得完了: 55件 → 重複除去後54件
+2026-07-11 12:00:12,324 [INFO] generators.collectors.news_collector: NHK国際: 15件取得
