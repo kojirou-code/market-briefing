@@ -1,0 +1,113 @@
+2026-08-13 04:00:06,754 [INFO] pipeline: ===== パイプライン開始: 2026-08-13 =====
+2026-08-13 04:00:06,759 [INFO] pipeline: [1] 市場データ取得
+2026-08-13 04:00:06,759 [INFO] generators.collectors.market_data: 市場データ取得開始
+2026-08-13 04:00:07,752 [INFO] generators.collectors.market_data: ^GSPC: 7753.71 (+0.33%)
+2026-08-13 04:00:07,925 [INFO] generators.collectors.market_data: ^IXIC: 26619.04 (+0.66%)
+2026-08-13 04:00:08,087 [INFO] generators.collectors.market_data: ^SOX: 12477.24 (+3.13%)
+2026-08-13 04:00:08,254 [INFO] generators.collectors.market_data: ^N225: 66970.22 (+2.08%)
+2026-08-13 04:00:08,434 [INFO] generators.collectors.market_data: 価格不連続点を検出: 2026-04-01 に947.9%の変化。直近90行のデータを使用（全120行）。
+2026-08-13 04:00:08,434 [INFO] generators.collectors.market_data: 1306.T: 431.90 (+1.01%)
+2026-08-13 04:00:08,599 [INFO] generators.collectors.market_data: 2516.T: 590.10 (+1.24%)
+2026-08-13 04:00:08,600 [INFO] pipeline: [2] テクニカル分析
+2026-08-13 04:00:09,528 [INFO] generators.analyzers.technical: S&P 500: テクニカル分析完了
+2026-08-13 04:00:09,529 [INFO] generators.analyzers.technical: NASDAQ: テクニカル分析完了
+2026-08-13 04:00:09,531 [INFO] generators.analyzers.technical: SOX（半導体）: テクニカル分析完了
+2026-08-13 04:00:09,532 [INFO] generators.analyzers.technical: 日経平均: テクニカル分析完了
+2026-08-13 04:00:09,533 [INFO] generators.analyzers.technical: TOPIX: テクニカル分析完了
+2026-08-13 04:00:09,535 [INFO] generators.analyzers.technical: グロース250: テクニカル分析完了
+2026-08-13 04:00:09,535 [INFO] pipeline: [3] 指標・先物取得
+2026-08-13 04:00:09,535 [INFO] generators.collectors.futures_commodities: 指標・先物データ取得開始
+2026-08-13 04:00:09,718 [INFO] generators.collectors.futures_commodities: ^VIX: 14.5100
+2026-08-13 04:00:09,891 [INFO] generators.collectors.futures_commodities: ^TNX: 4.6860
+2026-08-13 04:00:10,040 [INFO] generators.collectors.futures_commodities: JPY=X: 159.4910
+2026-08-13 04:00:10,208 [INFO] generators.collectors.futures_commodities: NIY=F: 68550.00
+2026-08-13 04:00:10,380 [INFO] generators.collectors.futures_commodities: ES=F: 7780.25
+2026-08-13 04:00:10,556 [INFO] generators.collectors.futures_commodities: CL=F: 83.20
+2026-08-13 04:00:10,733 [INFO] generators.collectors.futures_commodities: GC=F: 4476.50
+2026-08-13 04:00:10,733 [INFO] pipeline: [4] ニュース取得
+2026-08-13 04:00:11,961 [INFO] generators.collectors.news_collector: Google News JP 経済: 17件取得
+2026-08-13 04:00:12,673 [INFO] generators.collectors.news_collector: Google News JP 地政学: 19件取得
+2026-08-13 04:00:13,401 [INFO] generators.collectors.news_collector: Google News EN 経済: 0件取得
+2026-08-13 04:00:14,122 [INFO] generators.collectors.news_collector: Google News EN 地政学: 18件取得
+2026-08-13 04:00:14,122 [INFO] generators.collectors.news_collector: Google News取得完了: 54件 → 重複除去後54件
+2026-08-13 04:00:16,103 [INFO] generators.collectors.news_collector: NHK国際: 15件取得
+2026-08-13 04:00:17,210 [INFO] generators.collectors.news_collector: BBC World: 15件取得
+2026-08-13 04:00:17,567 [WARNING] generators.collectors.news_collector: RSS parse error for AP International: <unknown>:2:0: syntax error
+2026-08-13 04:00:17,567 [INFO] generators.collectors.news_collector: 国際RSS取得完了: 30件 → 重複除去後30件
+2026-08-13 04:00:17,567 [INFO] generators.collectors.news_collector: 全ニュース統合: 84件
+2026-08-13 04:00:17,573 [INFO] generators.collectors.news_collector: ニュース保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/data/news/2026-08-13.json (0件既存 + 84件追加 = 84件)
+2026-08-13 04:00:17,574 [INFO] generators.collectors.news_collector: 蓄積JSONからニュース読み込み: 84件
+2026-08-13 04:00:17,575 [INFO] pipeline: [4.5] Geminiサマリー生成
+2026-08-13 04:00:18,430 [INFO] google_genai.models: AFC is enabled with max remote calls: 10.
+2026-08-13 04:00:52,892 [INFO] httpx: HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-08-13 04:00:52,909 [INFO] generators.collectors.gemini_summarizer: Geminiサマリー生成完了: 2852文字
+2026-08-13 04:00:52,923 [INFO] generators.collectors.gemini_summarizer: サマリー保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/data/news/summary_2026-08-13.json
+2026-08-13 04:00:52,923 [INFO] pipeline: Geminiサマリー利用可能
+2026-08-13 04:00:52,923 [INFO] pipeline: [5] 経済カレンダー読み込み
+2026-08-13 04:00:52,934 [INFO] generators.collectors.economic_calendar: 経済カレンダー: 0件のイベントを返す（今日から14日以内）
+2026-08-13 04:00:52,935 [INFO] pipeline: [6] 異常値チェック
+2026-08-13 04:00:52,941 [INFO] generators.article.alert_checker: アラートチェック完了: 2件
+2026-08-13 04:00:52,942 [INFO] pipeline: アラート 2 件検出
+2026-08-13 04:00:52,942 [INFO] pipeline: [P2-1] セクターETF取得
+2026-08-13 04:00:53,456 [INFO] generators.collectors.sector_etf: sector ETF: 11/11 取得成功
+2026-08-13 04:00:53,457 [INFO] generators.collectors.sector_etf: セクターETF取得完了: 11/11件成功
+2026-08-13 04:00:53,460 [INFO] pipeline: [P2-2] Fear & Greed スコア計算
+2026-08-13 04:00:53,476 [INFO] generators.collectors.market_breadth: Fear & Greed スコア: 72.9 (Greed) [VIX=75.0, mom=60.0, rsi=65.0, macd=65.0, hl=99.7]
+2026-08-13 04:00:53,477 [INFO] pipeline: [P2-3] 方向性推定スコア計算
+2026-08-13 04:00:53,477 [INFO] generators.analyzers.direction_scorer: 方向性スコア: 米国=5(やや強気) 日本=4(やや強気) 総合=4(やや強気) [F&G=72.9 → 2点]
+2026-08-13 04:00:53,477 [INFO] pipeline: [P2-5] 需給データ取得
+2026-08-13 04:00:53,477 [INFO] generators.collectors.credit_margin: 信用残高データ取得開始
+2026-08-13 04:00:53,478 [INFO] generators.collectors.credit_margin: JPX XLS試行: https://www.jpx.co.jp/markets/statistics-equities/margin/tvdivq0000001rk9-att/mtseisan2026080700.xls
+2026-08-13 04:00:54,222 [INFO] generators.collectors.credit_margin: JPX XLS: 404 → スキップ (20260807)
+2026-08-13 04:00:54,222 [INFO] generators.collectors.credit_margin: JPX XLS試行: https://www.jpx.co.jp/markets/statistics-equities/margin/tvdivq0000001rk9-att/mtseisan2026073100.xls
+2026-08-13 04:00:54,407 [WARNING] generators.collectors.credit_margin: JPX XLS: 全シートで合計行が見つかりませんでした
+2026-08-13 04:00:54,407 [WARNING] generators.collectors.credit_margin: JPX XLS: 解析失敗 (20260731) → 次の週を試みる
+2026-08-13 04:00:54,407 [INFO] generators.collectors.credit_margin: JPX XLS試行: https://www.jpx.co.jp/markets/statistics-equities/margin/tvdivq0000001rk9-att/mtseisan2026072400.xls
+2026-08-13 04:00:54,553 [WARNING] generators.collectors.credit_margin: JPX XLS: 全シートで合計行が見つかりませんでした
+2026-08-13 04:00:54,553 [WARNING] generators.collectors.credit_margin: JPX XLS: 解析失敗 (20260724) → 次の週を試みる
+2026-08-13 04:00:54,554 [INFO] generators.collectors.credit_margin: JPX XLS失敗 → kabutan フォールバック
+2026-08-13 04:00:55,076 [WARNING] generators.collectors.credit_margin: kabutan信用残高取得失敗 (attempt 1): 404 Client Error: Not Found for url: https://kabutan.jp/info/credit/
+2026-08-13 04:01:00,301 [WARNING] generators.collectors.credit_margin: kabutan信用残高取得失敗 (attempt 2): 404 Client Error: Not Found for url: https://kabutan.jp/info/credit/
+2026-08-13 04:01:05,494 [WARNING] generators.collectors.credit_margin: kabutan信用残高取得失敗 (attempt 3): 404 Client Error: Not Found for url: https://kabutan.jp/info/credit/
+2026-08-13 04:01:05,494 [INFO] generators.collectors.credit_margin: kabutan失敗 → キャッシュ フォールバック
+2026-08-13 04:01:05,494 [ERROR] generators.collectors.credit_margin: 信用残高データ取得完全失敗
+2026-08-13 04:01:05,495 [INFO] generators.collectors.market_breadth_jpx: JPX需給データ取得開始
+2026-08-13 04:01:05,559 [WARNING] generators.collectors.market_breadth_jpx: kabutan市場ページ取得失敗 (attempt 1): 404 Client Error: Not Found for url: https://kabutan.jp/info/market/
+2026-08-13 04:01:10,776 [WARNING] generators.collectors.market_breadth_jpx: kabutan市場ページ取得失敗 (attempt 2): 404 Client Error: Not Found for url: https://kabutan.jp/info/market/
+2026-08-13 04:01:15,957 [WARNING] generators.collectors.market_breadth_jpx: kabutan市場ページ取得失敗 (attempt 3): 404 Client Error: Not Found for url: https://kabutan.jp/info/market/
+2026-08-13 04:01:16,028 [WARNING] generators.collectors.market_breadth_jpx: kabutan高安値ページ取得失敗 (attempt 1): 404 Client Error: Not Found for url: https://kabutan.jp/info/highlow/
+2026-08-13 04:01:21,601 [WARNING] generators.collectors.market_breadth_jpx: kabutan高安値ページ取得失敗 (attempt 2): 404 Client Error: Not Found for url: https://kabutan.jp/info/highlow/
+2026-08-13 04:01:26,804 [WARNING] generators.collectors.market_breadth_jpx: kabutan高安値ページ取得失敗 (attempt 3): 404 Client Error: Not Found for url: https://kabutan.jp/info/highlow/
+2026-08-13 04:01:26,805 [INFO] generators.collectors.market_breadth_jpx: JPX需給取得失敗 → キャッシュ フォールバック
+2026-08-13 04:01:26,805 [ERROR] generators.collectors.market_breadth_jpx: JPX需給データ取得完全失敗
+2026-08-13 04:01:26,808 [INFO] pipeline: hugo.toml baseURL パス: /market-briefing
+2026-08-13 04:01:26,808 [INFO] pipeline: [P2-4] チャートデータ取得
+2026-08-13 04:01:26,808 [INFO] generators.collectors.market_data: チャートデータ一括取得: 6ティッカー × 日次/週次
+2026-08-13 04:01:27,454 [INFO] generators.collectors.market_data: ^GSPC: 日次252行, 週次157行
+2026-08-13 04:01:27,454 [INFO] generators.collectors.market_data: ^IXIC: 日次252行, 週次157行
+2026-08-13 04:01:27,454 [INFO] generators.collectors.market_data: ^SOX: 日次252行, 週次157行
+2026-08-13 04:01:27,454 [INFO] generators.collectors.market_data: ^N225: 日次243行, 週次157行
+2026-08-13 04:01:27,454 [INFO] generators.collectors.market_data: 1306.T: 日次244行, 週次157行
+2026-08-13 04:01:27,454 [INFO] generators.collectors.market_data: 2516.T: 日次243行, 週次157行
+2026-08-13 04:01:27,454 [INFO] pipeline: [P2-4] チャート生成（日次・週次ローソク足）
+2026-08-13 04:01:27,705 [INFO] generators.article.chart_generator: ^GSPC: 日次チャート生成完了 → GSPC_daily.png
+2026-08-13 04:01:27,805 [INFO] generators.article.chart_generator: ^GSPC: 週次チャート生成完了 → GSPC_weekly.png
+2026-08-13 04:01:27,997 [INFO] generators.article.chart_generator: ^IXIC: 日次チャート生成完了 → IXIC_daily.png
+2026-08-13 04:01:28,097 [INFO] generators.article.chart_generator: ^IXIC: 週次チャート生成完了 → IXIC_weekly.png
+2026-08-13 04:01:28,141 [INFO] generators.article.chart_generator: ^SOX: 日次チャート生成完了 → SOX_daily.png
+2026-08-13 04:01:28,187 [INFO] generators.article.chart_generator: ^SOX: 週次チャート生成完了 → SOX_weekly.png
+2026-08-13 04:01:28,301 [INFO] generators.article.chart_generator: ^N225: 日次チャート生成完了 → N225_daily.png
+2026-08-13 04:01:28,447 [INFO] generators.article.chart_generator: ^N225: 週次チャート生成完了 → N225_weekly.png
+2026-08-13 04:01:28,570 [INFO] generators.article.chart_generator: 1306.T: 日次チャート生成完了 → 1306_T_daily.png
+2026-08-13 04:01:28,665 [INFO] generators.article.chart_generator: 1306.T: 週次チャート生成完了 → 1306_T_weekly.png
+2026-08-13 04:01:28,787 [INFO] generators.article.chart_generator: 2516.T: 日次チャート生成完了 → 2516_T_daily.png
+2026-08-13 04:01:28,945 [INFO] generators.article.chart_generator: 2516.T: 週次チャート生成完了 → 2516_T_weekly.png
+2026-08-13 04:01:28,945 [INFO] generators.article.chart_generator: チャート生成完了: 日次6件 / 週次6件
+2026-08-13 04:01:28,945 [INFO] pipeline: [P2-6] ファンダメンタルチャート生成
+2026-08-13 04:01:32,250 [INFO] generators.article.chart_generator: ファンダメンタルチャート生成完了 (4/4指標): fundamental_trends.png
+2026-08-13 04:01:32,251 [INFO] pipeline: [7] Markdown記事生成
+2026-08-13 04:01:32,275 [INFO] generators.article.article_builder: 記事生成完了: 17847文字
+2026-08-13 04:01:32,276 [INFO] generators.article.article_builder: 記事保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/hugo-site/content/posts/2026-08-13.md
+2026-08-13 04:01:32,276 [INFO] pipeline: [8] Hugo build
+2026-08-13 04:01:34,646 [INFO] generators.publisher.hugo_builder: Hugo ビルド成功 (attempt 1)
+2026-08-13 04:01:34,668 [INFO] pipeline: [9] git push → GitHub Pages デプロイ
