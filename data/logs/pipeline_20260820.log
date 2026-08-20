@@ -224,3 +224,47 @@
 2026-08-20 06:30:56,916 [INFO] pipeline: [8] Hugo build
 2026-08-20 06:30:58,801 [INFO] generators.publisher.hugo_builder: Hugo ビルド成功 (attempt 1)
 2026-08-20 06:30:58,803 [INFO] pipeline: [9] git push → GitHub Pages デプロイ
+2026-08-20 06:31:03,233 [INFO] generators.publisher.deployer: git push 成功 (attempt 1): briefing: 2026-08-20
+2026-08-20 06:31:03,234 [INFO] pipeline: ===== パイプライン完了 =====
+2026-08-20 12:00:06,793 [INFO] pipeline: ===== ニュース取得のみ実行: 2026-08-20 =====
+2026-08-20 12:00:07,779 [INFO] generators.collectors.news_collector: Google News JP 経済: 17件取得
+2026-08-20 12:00:08,597 [INFO] generators.collectors.news_collector: Google News JP 地政学: 20件取得
+2026-08-20 12:00:09,298 [INFO] generators.collectors.news_collector: Google News EN 経済: 5件取得
+2026-08-20 12:00:10,130 [INFO] generators.collectors.news_collector: Google News EN 地政学: 18件取得
+2026-08-20 12:00:10,130 [INFO] generators.collectors.news_collector: Google News取得完了: 60件 → 重複除去後60件
+2026-08-20 12:00:11,853 [INFO] generators.collectors.news_collector: NHK国際: 15件取得
+2026-08-20 12:00:12,796 [INFO] generators.collectors.news_collector: BBC World: 15件取得
+2026-08-20 12:00:13,195 [WARNING] generators.collectors.news_collector: RSS parse error for AP International: <unknown>:2:0: syntax error
+2026-08-20 12:00:13,195 [INFO] generators.collectors.news_collector: 国際RSS取得完了: 30件 → 重複除去後30件
+2026-08-20 12:00:13,195 [INFO] generators.collectors.news_collector: 全ニュース統合: 90件
+2026-08-20 12:00:13,202 [INFO] generators.collectors.news_collector: ニュース保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/data/news/2026-08-20.json (107件既存 + 42件追加 = 149件)
+2026-08-20 12:00:13,204 [INFO] pipeline: ニュース取得・保存完了: 149件
+2026-08-20 12:00:13,204 [INFO] pipeline: ===== ニュース取得完了 =====
+2026-08-20 18:00:06,908 [INFO] pipeline: ===== ニュース取得のみ実行: 2026-08-20 =====
+2026-08-20 18:00:08,168 [INFO] generators.collectors.news_collector: Google News JP 経済: 17件取得
+2026-08-20 18:00:08,964 [INFO] generators.collectors.news_collector: Google News JP 地政学: 20件取得
+2026-08-20 18:00:09,658 [INFO] generators.collectors.news_collector: Google News EN 経済: 5件取得
+2026-08-20 18:00:10,530 [INFO] generators.collectors.news_collector: Google News EN 地政学: 20件取得
+2026-08-20 18:00:10,530 [INFO] generators.collectors.news_collector: Google News取得完了: 62件 → 重複除去後62件
+2026-08-20 18:00:12,025 [INFO] generators.collectors.news_collector: NHK国際: 15件取得
+2026-08-20 18:00:12,857 [INFO] generators.collectors.news_collector: BBC World: 15件取得
+2026-08-20 18:00:13,380 [WARNING] generators.collectors.news_collector: RSS parse error for AP International: <unknown>:2:0: syntax error
+2026-08-20 18:00:13,381 [INFO] generators.collectors.news_collector: 国際RSS取得完了: 30件 → 重複除去後30件
+2026-08-20 18:00:13,381 [INFO] generators.collectors.news_collector: 全ニュース統合: 92件
+2026-08-20 18:00:13,420 [INFO] generators.collectors.news_collector: ニュース保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/data/news/2026-08-20.json (149件既存 + 43件追加 = 192件)
+2026-08-20 18:00:13,421 [INFO] pipeline: ニュース取得・保存完了: 192件
+2026-08-20 18:00:13,421 [INFO] pipeline: ===== ニュース取得完了 =====
+2026-08-20 23:00:07,817 [INFO] pipeline: ===== ニュース取得のみ実行: 2026-08-20 =====
+2026-08-20 23:00:07,824 [WARNING] generators.collectors.news_collector: Google News RSS parse error for Google News JP 経済: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+2026-08-20 23:00:07,828 [WARNING] generators.collectors.news_collector: Google News RSS parse error for Google News JP 地政学: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+2026-08-20 23:00:07,832 [WARNING] generators.collectors.news_collector: Google News RSS parse error for Google News EN 経済: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+2026-08-20 23:00:07,835 [WARNING] generators.collectors.news_collector: Google News RSS parse error for Google News EN 地政学: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+2026-08-20 23:00:07,835 [INFO] generators.collectors.news_collector: Google News取得完了: 0件 → 重複除去後0件
+2026-08-20 23:00:07,840 [WARNING] generators.collectors.news_collector: RSS parse error for NHK国際: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+2026-08-20 23:00:07,843 [WARNING] generators.collectors.news_collector: RSS parse error for BBC World: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+2026-08-20 23:00:07,847 [WARNING] generators.collectors.news_collector: RSS parse error for AP International: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+2026-08-20 23:00:07,847 [INFO] generators.collectors.news_collector: 国際RSS取得完了: 0件 → 重複除去後0件
+2026-08-20 23:00:07,847 [INFO] generators.collectors.news_collector: 全ニュース統合: 0件
+2026-08-20 23:00:07,849 [INFO] generators.collectors.news_collector: ニュース保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/data/news/2026-08-20.json (192件既存 + 0件追加 = 192件)
+2026-08-20 23:00:07,850 [INFO] pipeline: ニュース取得・保存完了: 192件
+2026-08-20 23:00:07,850 [INFO] pipeline: ===== ニュース取得完了 =====
