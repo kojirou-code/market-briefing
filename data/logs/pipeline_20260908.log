@@ -224,3 +224,47 @@
 2026-09-08 06:30:50,285 [INFO] pipeline: [8] Hugo build
 2026-09-08 06:30:52,354 [INFO] generators.publisher.hugo_builder: Hugo ビルド成功 (attempt 1)
 2026-09-08 06:30:52,354 [INFO] pipeline: [9] git push → GitHub Pages デプロイ
+2026-09-08 06:30:56,295 [INFO] generators.publisher.deployer: git push 成功 (attempt 1): briefing: 2026-09-08
+2026-09-08 06:30:56,296 [INFO] pipeline: ===== パイプライン完了 =====
+2026-09-08 12:00:06,649 [INFO] pipeline: ===== ニュース取得のみ実行: 2026-09-08 =====
+2026-09-08 12:00:07,635 [INFO] generators.collectors.news_collector: Google News JP 経済: 19件取得
+2026-09-08 12:00:08,334 [INFO] generators.collectors.news_collector: Google News JP 地政学: 20件取得
+2026-09-08 12:00:09,052 [INFO] generators.collectors.news_collector: Google News EN 経済: 2件取得
+2026-09-08 12:00:09,876 [INFO] generators.collectors.news_collector: Google News EN 地政学: 15件取得
+2026-09-08 12:00:09,876 [INFO] generators.collectors.news_collector: Google News取得完了: 56件 → 重複除去後56件
+2026-09-08 12:00:10,074 [INFO] generators.collectors.news_collector: NHK国際: 15件取得
+2026-09-08 12:00:10,807 [INFO] generators.collectors.news_collector: BBC World: 15件取得
+2026-09-08 12:00:10,864 [WARNING] generators.collectors.news_collector: RSS parse error for AP International: <unknown>:2:0: syntax error
+2026-09-08 12:00:10,864 [INFO] generators.collectors.news_collector: 国際RSS取得完了: 30件 → 重複除去後30件
+2026-09-08 12:00:10,864 [INFO] generators.collectors.news_collector: 全ニュース統合: 86件
+2026-09-08 12:00:10,872 [INFO] generators.collectors.news_collector: ニュース保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/data/news/2026-09-08.json (102件既存 + 41件追加 = 143件)
+2026-09-08 12:00:10,873 [INFO] pipeline: ニュース取得・保存完了: 143件
+2026-09-08 12:00:10,873 [INFO] pipeline: ===== ニュース取得完了 =====
+2026-09-08 18:00:07,588 [INFO] pipeline: ===== ニュース取得のみ実行: 2026-09-08 =====
+2026-09-08 18:00:08,241 [INFO] generators.collectors.news_collector: Google News JP 経済: 20件取得
+2026-09-08 18:00:09,010 [INFO] generators.collectors.news_collector: Google News JP 地政学: 20件取得
+2026-09-08 18:00:09,659 [INFO] generators.collectors.news_collector: Google News EN 経済: 2件取得
+2026-09-08 18:00:10,549 [INFO] generators.collectors.news_collector: Google News EN 地政学: 18件取得
+2026-09-08 18:00:10,550 [INFO] generators.collectors.news_collector: Google News取得完了: 60件 → 重複除去後60件
+2026-09-08 18:00:10,734 [INFO] generators.collectors.news_collector: NHK国際: 15件取得
+2026-09-08 18:00:10,801 [INFO] generators.collectors.news_collector: BBC World: 15件取得
+2026-09-08 18:00:10,857 [WARNING] generators.collectors.news_collector: RSS parse error for AP International: <unknown>:2:0: syntax error
+2026-09-08 18:00:10,857 [INFO] generators.collectors.news_collector: 国際RSS取得完了: 30件 → 重複除去後30件
+2026-09-08 18:00:10,857 [INFO] generators.collectors.news_collector: 全ニュース統合: 90件
+2026-09-08 18:00:10,862 [INFO] generators.collectors.news_collector: ニュース保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/data/news/2026-09-08.json (143件既存 + 42件追加 = 185件)
+2026-09-08 18:00:10,864 [INFO] pipeline: ニュース取得・保存完了: 185件
+2026-09-08 18:00:10,864 [INFO] pipeline: ===== ニュース取得完了 =====
+2026-09-08 23:00:06,577 [INFO] pipeline: ===== ニュース取得のみ実行: 2026-09-08 =====
+2026-09-08 23:00:07,342 [INFO] generators.collectors.news_collector: Google News JP 経済: 20件取得
+2026-09-08 23:00:08,425 [INFO] generators.collectors.news_collector: Google News JP 地政学: 20件取得
+2026-09-08 23:00:09,234 [INFO] generators.collectors.news_collector: Google News EN 経済: 2件取得
+2026-09-08 23:00:10,116 [INFO] generators.collectors.news_collector: Google News EN 地政学: 19件取得
+2026-09-08 23:00:10,116 [INFO] generators.collectors.news_collector: Google News取得完了: 61件 → 重複除去後61件
+2026-09-08 23:00:10,308 [INFO] generators.collectors.news_collector: NHK国際: 15件取得
+2026-09-08 23:00:10,388 [INFO] generators.collectors.news_collector: BBC World: 15件取得
+2026-09-08 23:00:10,484 [WARNING] generators.collectors.news_collector: RSS parse error for AP International: <unknown>:2:0: syntax error
+2026-09-08 23:00:10,485 [INFO] generators.collectors.news_collector: 国際RSS取得完了: 30件 → 重複除去後30件
+2026-09-08 23:00:10,485 [INFO] generators.collectors.news_collector: 全ニュース統合: 91件
+2026-09-08 23:00:10,495 [INFO] generators.collectors.news_collector: ニュース保存: /Volumes/WD Blue SN500 2TB/projects/investing/market-briefing/data/news/2026-09-08.json (185件既存 + 42件追加 = 227件)
+2026-09-08 23:00:10,496 [INFO] pipeline: ニュース取得・保存完了: 227件
+2026-09-08 23:00:10,496 [INFO] pipeline: ===== ニュース取得完了 =====
